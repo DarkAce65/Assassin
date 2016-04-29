@@ -32,13 +32,16 @@ Meteor.methods({
 		shuffle(userIdList);
 
 		for(var i = 0; i < userIdList.length; i++) {
-			var shift = (i + 1) % userIdList.length;
-			Meteor.users.update(userIdList[i], {
+			var assassinId = userIdList[i];
+			var userId = userIdList[(i + 1) % userIdList.length];
+			var targetId = userIdList[(i + 2) % userIdList.length];
+			Meteor.users.update(userId, {
 				$set: {
 					"admin": false,
 					"assassinations": 0,
 					"alive": true,
-					"target": userIdList[shift]
+					"assassin": assassinId,
+					"target": targetId
 				}
 			});
 		}

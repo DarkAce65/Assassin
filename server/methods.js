@@ -10,7 +10,7 @@ function shuffle(array) { // Fisher–Yates Shuffle
 }
 
 Meteor.methods({
-	"assignInitialTargets": function() {
+	"setupGame": function() {
 		var userIdList = Meteor.users.find({}, {fields: {"_id": 1}}).fetch().map(function(value) {
 			return value._id;
 		});
@@ -20,6 +20,9 @@ Meteor.methods({
 			var shift = (i + 1) % userIdList.length;
 			Meteor.users.update(userIdList[i], {
 				$set: {
+					"admin": false,
+					"assassinations": 0,
+					"killed": false,
 					"target": userIdList[shift]
 				}
 			});

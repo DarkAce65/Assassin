@@ -23,6 +23,7 @@ insecure                # Allow all DB writes from clients (for prototyping)
 less
 iron:router
 accounts-base
+accounts-google
 accounts-facebook
 service-configuration
 nemo64:bootstrap

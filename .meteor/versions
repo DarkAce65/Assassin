@@ -1,5 +1,6 @@
 accounts-base@1.2.5
 accounts-facebook@1.0.8
+accounts-google@1.0.8
 accounts-oauth@1.1.11
 allow-deny@1.0.3
 autoupdate@1.2.7
@@ -30,6 +31,7 @@ facebook@1.2.5
 fastclick@1.0.10
 fortawesome:fontawesome@4.5.0
 geojson-utils@1.0.7
+google@1.1.10
 hot-code-push@1.0.3
 html-tools@1.0.8
 htmljs@1.0.8

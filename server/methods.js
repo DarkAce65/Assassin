@@ -37,7 +37,7 @@ Meteor.methods({
 				$set: {
 					"admin": false,
 					"assassinations": 0,
-					"killed": false,
+					"alive": true,
 					"target": userIdList[shift]
 				}
 			});

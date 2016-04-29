@@ -4,12 +4,18 @@ Template.login.events({
 			if(error) {
 				alert(error);
 			}
+			else {
+				Router.go("home");
+			}
 		});
 	},
 	"click #googleLogin": function(e) {
 		Meteor.loginWithGoogle(function(error) {
 			if(error) {
 				alert(error);
+			}
+			else {
+				Router.go("home");
 			}
 		});
 	}
@@ -26,6 +32,9 @@ Template.home.events({
 		Meteor.logout(function(error) {
 			if(error) {
 				alert(error);
+			}
+			else {
+				Router.go("login");
 			}
 		});
 	}

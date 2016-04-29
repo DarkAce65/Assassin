@@ -1,4 +1,8 @@
 Meteor.publish("userInfo", function() {
+	if(!this.userId) {
+		return this.ready();
+	}
+
 	return Meteor.users.find(this.userId, {
 		fields: {
 			"admin": 1,
@@ -10,6 +14,10 @@ Meteor.publish("userInfo", function() {
 });
 
 Meteor.publish("target", function() {
+	if(!this.userId) {
+		return this.ready();
+	}
+
 	var target = Meteor.users.findOne(this.userId).target;
 	return Meteor.users.find(target, {
 		fields: {

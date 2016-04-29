@@ -20,6 +20,12 @@ Meteor.methods({
 		}
 	},
 	"setupGame": function() {
+		if(!this.userId) {
+			throw new Meteor.Error(401, "You are not logged in.");
+		}
+		if(!Meteor.users.findOne(this.userId).admin) {
+			throw new Meteor.Error(401, "You are not authorized to start the game.");
+		}
 		var userIdList = Meteor.users.find({}, {fields: {"_id": 1}}).fetch().map(function(value) {
 			return value._id;
 		});

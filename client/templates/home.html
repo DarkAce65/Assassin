@@ -1,0 +1,13 @@
+<template name="home">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<div class="page-header">
+					<p class="h1">Assassin</p>
+				</div>
+				<h3>{{currentUser.profile.name}}{{#if currentUser.admin}} <small>Admin</small>{{/if}}</h3>
+				<p><i class="fa fa-bullseye"></i> Target: {{target}}</p>
+			</div>
+		</div>
+	</div>
+</template>

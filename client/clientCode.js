@@ -14,3 +14,9 @@ Template.login.events({
 		});
 	}
 });
+
+Template.home.helpers({
+	"target": function() {
+		return Meteor.users.findOne(Meteor.user().target).profile.name;
+	}
+});

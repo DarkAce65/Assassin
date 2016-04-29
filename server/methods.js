@@ -10,6 +10,15 @@ function shuffle(array) { // Fisher–Yates Shuffle
 }
 
 Meteor.methods({
+	"makeAdmin": function(password) {
+		if(this.userId && password === Meteor.settings.private.adminPassword) {
+			Meteor.users.update(this.userId, {
+				$set: {
+					"admin": true
+				}
+			});
+		}
+	},
 	"setupGame": function() {
 		var userIdList = Meteor.users.find({}, {fields: {"_id": 1}}).fetch().map(function(value) {
 			return value._id;

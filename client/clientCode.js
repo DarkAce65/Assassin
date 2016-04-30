@@ -1,3 +1,8 @@
+Template.registerHelper("activeRoute", function(route) {
+	var currentRoute = Router.current().route.getName();
+	return currentRoute === route ? " active" : "";
+});
+
 Template.login.events({
 	"click #facebookLogin": function(e) {
 		Meteor.loginWithFacebook(function(error) {

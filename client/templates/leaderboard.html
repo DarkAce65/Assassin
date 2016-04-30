@@ -12,7 +12,7 @@
 					</thead>
 					<tbody>
 						{{#each user in userList}}
-							<tr>
+							<tr class="{{#unless user.alive}}killed{{/unless}}">
 								<td>{{user.profile.name}}</td>
 								<td>{{user.kills}}</td>
 							</tr>

@@ -7,10 +7,21 @@
 					<img class="media-object" src="/favicon.png" style="width: 64px; height: 64px;">
 				</div>
 				<div class="media-body">
-					<h4 class="media-heading" style="color: red;">Target</h4>
+					<h4 class="media-heading" style="color: red;">Current Target</h4>
 					<p>{{target}}</p>
 				</div>
 			</div>
+			{{#if currentUser.assassinations}}
+			<ul class="list-unstyled">
+				<li>...</li>
+			</ul>
+			{{/if}}
+			<p>
+				<div class="btn-group">
+					<button class="btn btn-danger">I assassinated my target</button>
+					<button class="btn btn-primary">I was assassinated</button>
+				</div>
+			</p>
 		</div>
 	</div>
 </template>

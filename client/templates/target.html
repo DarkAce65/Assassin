@@ -7,21 +7,25 @@
 					<img class="media-object" src="/favicon.png" style="width: 64px; height: 64px;">
 				</div>
 				<div class="media-body">
-					<h4 class="media-heading" style="color: red;">Current Target</h4>
-					<p>{{target}}</p>
+					<h2 class="media-heading" style="color: red;">Current Target</h2>
+					<p class="lead">{{target}}</p>
 				</div>
 			</div>
-			{{#if currentUser.assassinations}}
-			<ul class="list-unstyled">
-				<li>...</li>
-			</ul>
-			{{/if}}
-			<p>
-				<div class="btn-group">
-					<button class="btn btn-danger">I assassinated my target</button>
-					<button class="btn btn-primary">I was assassinated</button>
-				</div>
-			</p>
+			<div class="btn-group btn-group-sm">
+				<button class="btn btn-danger">I killed this person</button>
+				<button class="btn btn-primary">I was killed</button>
+			</div>
 		</div>
 	</div>
+	{{#if currentUser.assassinations}}
+	<div id="actionLog" class="panel panel-default">
+		<div class="panel-heading">Action Log</div>
+		<div class="panel-body">
+			<p>Kills: {{currentUser.assassinations}}</p>
+			{{#each action in actions}}
+			<div>{{action}}</div>
+			{{/each}}
+		</div>
+	</div>
+	{{/if}}
 </template>

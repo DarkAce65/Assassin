@@ -77,11 +77,15 @@ Template.target.helpers({
 });
 
 Template.target.events({
-	"click #confirmKill": function(e) {
+	"click #killTarget": function(e) {
+		e.preventDefault();
+		Meteor.call("killTarget", Meteor.user().target);
+	},
+	"click .confirmKill": function(e) {
 		e.preventDefault();
 		Meteor.call("confirmKill", this._id);
 	},
-	"click #denyKill": function(e) {
+	"click .denyKill": function(e) {
 		e.preventDefault();
 		// TODO: denyKill
 	}

@@ -13,6 +13,14 @@ Meteor.publish("userInfo", function() {
 	});
 });
 
+Meteor.publish("userList", function() {
+	return Meteor.users.find({}, {
+		fields: {
+			"profile.name": 1
+		}
+	});
+});
+
 Meteor.publish("target", function() {
 	if(!this.userId) {
 		return this.ready();
@@ -24,4 +32,8 @@ Meteor.publish("target", function() {
 			"profile.name": 1
 		}
 	});
+});
+
+Meteor.publish("posts", function() {
+	return Posts.find();
 });

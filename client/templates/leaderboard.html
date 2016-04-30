@@ -1,0 +1,10 @@
+<template name="leaderboard">
+	<div id="leaderboard" class="panel panel-default">
+		<div class="panel-heading">Leaderboard</div>
+		<div class="panel-body">
+			{{#each user in userList}}
+			<div>{{user.profile.name}} - {{user.assassinations}}</div>
+			{{/each}}
+		</div>
+	</div>
+</template>

@@ -2,6 +2,7 @@
 	<div id="leaderboard" class="panel panel-default">
 		<div class="panel-heading">Leaderboard</div>
 		<div class="panel-body">
+			{{#if userList}}
 			<div class="table-responsive">
 				<table id="leaderboardTable" class="table table-striped table-hover">
 					<thead>
@@ -20,6 +21,9 @@
 					</tbody>
 				</table>
 			</div>
+			{{else}}
+			<p>The game has not yet started.</p>
+			{{/if}}
 		</div>
 	</div>
 </template>

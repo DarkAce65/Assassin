@@ -22,9 +22,10 @@ Meteor.publish("userInfo", function() {
 });
 
 Meteor.publish("userList", function() {
-	return Meteor.users.find({}, {
+	return Meteor.users.find({"inGame": true}, {
 		fields: {
 			"alive": 1,
+			"inGame": 1,
 			"kills": 1,
 			"profile.name": 1
 		}

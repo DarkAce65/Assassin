@@ -68,7 +68,7 @@ Template.target.helpers({
 		if(this.assassin === Meteor.userId()) {a = "You"; m = "claim to have killed";}
 		else if(assassin) {a = assassin.profile.name;}
 
-		if(this.target === Meteor.userId()) {t = "You"; c = '<br><span>Is this correct? <a href="#" style="color: green;">Yes</a> / <a href="#" style="color: red;">No</a></span>';}
+		if(this.target === Meteor.userId()) {t = "You"; c = '<br><span>Is this correct? <a href="#" class="confirmKill" style="color: green;">Yes</a> / <a href="#" class="denyKill" style="color: red;">No</a></span>';}
 		else if(target) {t = target.profile.name;}
 		if(this.confirmed) {m = "killed"; c = "";}
 
@@ -77,15 +77,13 @@ Template.target.helpers({
 });
 
 Template.target.events({
-	"click #logout": function() {
-		Meteor.logout(function(error) {
-			if(error) {
-				alert(error);
-			}
-			else {
-				Router.go("login");
-			}
-		});
+	"click #confirmKill": function(e) {
+		e.preventDefault();
+		Meteor.call("confirmKill", this._id);
+	},
+	"click #denyKill": function(e) {
+		e.preventDefault();
+		// TODO: denyKill
 	}
 });
 

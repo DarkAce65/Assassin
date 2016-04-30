@@ -19,8 +19,10 @@
 		<div class="panel-heading">Action Log</div>
 		<div class="panel-body">
 			<p>Kills: {{currentUser.kills}}</p>
-			{{#each action in actions}}
-			<div>{{action}}</div>
+			{{#each actions}}
+			{{#if equals type "kill"}}
+			<p>{{calendarTime timestamp}} <i class="blade">▬ι══ﺤ</i> {{{message}}}</p>
+			{{/if}}
 			{{/each}}
 		</div>
 	</div>

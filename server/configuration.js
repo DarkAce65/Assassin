@@ -30,6 +30,15 @@ Meteor.publish("userList", function() {
 	});
 });
 
+Meteor.publish("actions", function() {
+	return Actions.find({
+		$or: [
+			{"assassin": this.userId},
+			{"target": this.userId}
+		]
+	});
+});
+
 Meteor.publish("posts", function() {
 	return Posts.find();
 });

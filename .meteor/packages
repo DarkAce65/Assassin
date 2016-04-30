@@ -28,5 +28,6 @@ accounts-google
 accounts-facebook
 service-configuration
 alanning:roles
+momentjs:moment
 nemo64:bootstrap
 fortawesome:fontawesome

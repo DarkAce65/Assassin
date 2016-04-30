@@ -3,6 +3,17 @@ Template.registerHelper("activeRoute", function(route) {
 	return currentRoute === route ? " active" : "";
 });
 
+Template.registerHelper("calendarTime", function(date) {
+	if(date) {
+		return moment(date).calendar();
+	}
+	return "Unknown";
+});
+
+Template.registerHelper("equals", function(a, b) {
+	return a === b;
+});
+
 Template.navigation.events({
 	"click #logout": function(e) {
 		Meteor.logout(function(error) {
@@ -42,6 +53,25 @@ Template.login.events({
 Template.target.helpers({
 	"target": function() {
 		return Meteor.users.findOne(Meteor.user().target).profile.name;
+	},
+	"actions": function() {
+		return Actions.find().fetch();
+	},
+	"message": function() {
+		var a = "Unknown";
+		var m = "claims to have killed";
+		var t = "Unknown";
+		var assassin = Meteor.users.findOne(this.assassin);
+		var target = Meteor.users.findOne(this.target);
+
+		if(this.assassin === Meteor.userId()) {a = "You"; m = "claim to have killed";}
+		else if(assassin) {a = assassin.profile.name;}
+
+		if(this.target === Meteor.userId()) {t = "You";}
+		else if(target) {t = target.profile.name;}
+		if(this.confirmed) {m = "killed";}
+
+		return "<b>" + a + "</b> " + m + " <b>" + t + "</b>";
 	}
 });
 

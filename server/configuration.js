@@ -16,7 +16,7 @@ Meteor.publish("userInfo", function() {
 			"inGame": 1,
 			"alive": 1,
 			"target": 1,
-			"assassinations": 1
+			"kills": 1
 		}
 	});
 });
@@ -24,7 +24,7 @@ Meteor.publish("userInfo", function() {
 Meteor.publish("userList", function() {
 	return Meteor.users.find({}, {
 		fields: {
-			"assassinations": 1,
+			"kills": 1,
 			"profile.name": 1
 		}
 	});

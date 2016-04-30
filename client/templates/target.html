@@ -17,11 +17,11 @@
 			</div>
 		</div>
 	</div>
-	{{#if currentUser.assassinations}}
+	{{#if currentUser.kills}}
 	<div id="actionLog" class="panel panel-default">
 		<div class="panel-heading">Action Log</div>
 		<div class="panel-body">
-			<p>Kills: {{currentUser.assassinations}}</p>
+			<p>Kills: {{currentUser.kills}}</p>
 			{{#each action in actions}}
 			<div>{{action}}</div>
 			{{/each}}

@@ -49,7 +49,7 @@ Meteor.methods({
 			$set: {
 				"inGame": true,
 				"alive": true,
-				"assassinations": 0
+				"kills": 0
 			}
 		}, {multi: true});
 	}

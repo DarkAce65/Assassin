@@ -2,6 +2,7 @@ accounts-base@1.2.5
 accounts-facebook@1.0.8
 accounts-google@1.0.8
 accounts-oauth@1.1.11
+alanning:roles@1.2.15
 allow-deny@1.0.3
 autoupdate@1.2.7
 babel-compiler@6.6.1

@@ -27,5 +27,6 @@ accounts-base
 accounts-google
 accounts-facebook
 service-configuration
+alanning:roles
 nemo64:bootstrap
 fortawesome:fontawesome

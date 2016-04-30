@@ -1,5 +1,4 @@
 Accounts.onCreateUser(function(options, user) {
-	user.admin = false;
 	user.inGame = false;
 
 	if(options.profile) {
@@ -12,7 +11,6 @@ Accounts.onCreateUser(function(options, user) {
 Meteor.publish("userInfo", function() {
 	return Meteor.users.find(this.userId, {
 		fields: {
-			"admin": 1,
 			"inGame": 1,
 			"alive": 1,
 			"target": 1,

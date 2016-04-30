@@ -12,18 +12,14 @@ function shuffle(array) { // Fisher–Yates Shuffle
 Meteor.methods({
 	"makeAdmin": function(password) {
 		if(this.userId && password === Meteor.settings.private.adminPassword) {
-			Meteor.users.update(this.userId, {
-				$set: {
-					"admin": true
-				}
-			});
+			Roles.addUsersToRoles(this.userId, "admin");
 		}
 	},
 	"assignRandomTargets": function() {
 		if(!this.userId) {
 			throw new Meteor.Error(401, "You are not logged in.");
 		}
-		if(!Meteor.users.findOne(this.userId).admin) {
+		if(!Roles.userIsInRole(this.userId, "admin")) {
 			throw new Meteor.Error(401, "You are not authorized to start the game.");
 		}
 		var userIdList = Meteor.users.find({}, {fields: {"_id": 1}}).fetch().map(function(value) {
@@ -44,6 +40,12 @@ Meteor.methods({
 		}
 	},
 	"startGame": function() {
+		if(!this.userId) {
+			throw new Meteor.Error(401, "You are not logged in.");
+		}
+		if(!Roles.userIsInRole(this.userId, "admin")) {
+			throw new Meteor.Error(401, "You are not authorized to start the game.");
+		}
 		Meteor.call("assignRandomTargets");
 		Meteor.users.update({}, {
 			$set: {

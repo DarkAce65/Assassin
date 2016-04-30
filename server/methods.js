@@ -19,7 +19,7 @@ Meteor.methods({
 			});
 		}
 	},
-	"setupGame": function() {
+	"assignRandomTargets": function() {
 		if(!this.userId) {
 			throw new Meteor.Error(401, "You are not logged in.");
 		}
@@ -37,13 +37,20 @@ Meteor.methods({
 			var targetId = userIdList[(i + 2) % userIdList.length];
 			Meteor.users.update(userId, {
 				$set: {
-					"admin": false,
-					"assassinations": 0,
-					"alive": true,
 					"assassin": assassinId,
 					"target": targetId
 				}
 			});
 		}
+	},
+	"startGame": function() {
+		Meteor.call("assignRandomTargets");
+		Meteor.users.update({}, {
+			$set: {
+				"inGame": true,
+				"alive": true,
+				"assassinations": 0
+			}
+		}, {multi: true});
 	}
 });

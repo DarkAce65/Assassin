@@ -16,12 +16,17 @@
 	</div>
 	{{#if currentUser.kills}}
 	<div id="actionLog" class="panel panel-default">
-		<div class="panel-heading">Action Log</div>
+		<div class="panel-heading">
+			<div class="row">
+				<div class="col-xs-6">Action Log</div>
+				<div class="col-xs-6" style="text-align: right;">Kills: {{currentUser.kills}}</div>
+			</div>
+		</div>
 		<div class="panel-body">
-			<p>Kills: {{currentUser.kills}}</p>
 			{{#each actions}}
 			{{#if equals type "kill"}}
 			<p>{{calendarTime timestamp}} <i class="blade">▬ι══ﺤ</i> {{{message}}}</p>
+			<div style="height: 10px; border-top: 1px solid gray;"></div>
 			{{/if}}
 			{{/each}}
 		</div>

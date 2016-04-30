@@ -54,5 +54,27 @@ Meteor.methods({
 				"kills": 0
 			}
 		}, {multi: true});
+	},
+	"killTarget": function(targetId) {
+		if(targetId) {
+			if(!Actions.findOne({"assassin": this.userId, "target": targetId})) {
+				Actions.insert({
+					"timestamp": Date.now(),
+					"type": "kill",
+					"confirmed": false,
+					"assassin": this.userId,
+					"target": targetId
+				});
+			}
+		}
+	},
+	"confirmKill": function(actionLogId) {
+		if(actionLogId) {
+			if(!Actions.findOne({"_id": actionLogId, "target": this.userId})) {
+				Actions.update(actionLogId, {$set: {
+					"confirmed": true
+				}});
+			}
+		}
 	}
 });

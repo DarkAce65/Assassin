@@ -10,7 +10,7 @@ Template.login.events({
 				alert(error);
 			}
 			else {
-				Router.go("home");
+				Router.go("target");
 			}
 		});
 	},
@@ -20,19 +20,19 @@ Template.login.events({
 				alert(error);
 			}
 			else {
-				Router.go("home");
+				Router.go("target");
 			}
 		});
 	}
 });
 
-Template.home.helpers({
+Template.target.helpers({
 	"target": function() {
 		return Meteor.users.findOne(Meteor.user().target).profile.name;
 	}
 });
 
-Template.home.events({
+Template.target.events({
 	"click #logout": function() {
 		Meteor.logout(function(error) {
 			if(error) {

@@ -24,6 +24,7 @@ Meteor.publish("userInfo", function() {
 Meteor.publish("userList", function() {
 	return Meteor.users.find({}, {
 		fields: {
+			"assassinations": 1,
 			"profile.name": 1
 		}
 	});

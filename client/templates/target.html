@@ -2,7 +2,15 @@
 	<div id="target" class="panel panel-default">
 		<div class="panel-heading">{{currentUser.profile.name}}{{#if currentUser.admin}} <small>Admin</small>{{/if}}</div>
 		<div class="panel-body">
-			<h4 style="color: red;">Target: {{target}}</h4>
+			<div class="media">
+				<div class="media-left">
+					<img class="media-object" src="/favicon.png" style="width: 64px; height: 64px;">
+				</div>
+				<div class="media-body">
+					<h4 class="media-heading" style="color: red;">Target</h4>
+					<p>{{target}}</p>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>

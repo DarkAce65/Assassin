@@ -3,6 +3,19 @@ Template.registerHelper("activeRoute", function(route) {
 	return currentRoute === route ? " active" : "";
 });
 
+Template.navigation.events({
+	"click #logout": function(e) {
+		Meteor.logout(function(error) {
+			if(error) {
+				alert(error);
+			}
+			else {
+				Router.go("login");
+			}
+		});
+	}
+});
+
 Template.login.events({
 	"click #facebookLogin": function(e) {
 		Meteor.loginWithFacebook(function(error) {

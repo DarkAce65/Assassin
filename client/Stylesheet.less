@@ -4,8 +4,17 @@
 	outline: 0;
 }
 
-html, body {
+html {
 	height: 100%;
+}
+
+body {
+	min-height: 100%;
+	position: relative;
+}
+
+html, body {
+	overflow-x: hidden;
 }
 
 fieldset.hrText {
@@ -14,14 +23,47 @@ fieldset.hrText {
 	border: 1px solid lightgray;
 	border-width: 1px 0 0;
 	text-align: center;
+
+	legend {
+		display: block;
+		width: auto;
+		margin: 0;
+		padding: 5px 10px;
+		border: none;
+		font-size: 1em;
+		color: gray;
+	}
 }
 
-fieldset.hrText legend {
-	display: block;
-	width: auto;
-	margin: 0;
-	padding: 5px 10px;
-	border: none;
-	font-size: 1em;
-	color: gray;
+.footer {
+	display: none;
+	position: absolute;
+	width: 100%;
+	left: 0;
+	bottom: 0;
+	padding: 20px 0;
+	background-color: whitesmoke;
+	text-align: center;
+	font-variant: small-caps;
+	border-top: 3px solid darkorange;
+
+	.nav p, .nav a {
+		color: lighten(#333, 26%);
+		margin: 0 3px;
+		text-decoration: none;
+	}
+
+	.nav a:hover {
+		color: #5E5E5E;
+	}
+}
+
+@media screen and (max-width: 767px) {
+	.content {
+		padding-bottom: 88px;
+	}
+
+	.footer {
+		display: block;
+	}
 }

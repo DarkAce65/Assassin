@@ -64,6 +64,56 @@ fieldset.hrText {
 	}
 }
 
+#leaderboardTable {
+	table-layout: fixed;
+
+	tbody tr {
+		&:nth-child(1) { // 1st place
+			background-color: hsl(51, 100%, 80%);
+			font-size: 150%;
+
+			th, td {
+				border-color: #FFE347;
+			}
+		}
+
+		&:nth-child(2) { // 2nd place
+			background-color: hsl(0, 0%, 80%);
+			font-size: 125%;
+
+			th, td {
+				border-color: silver;
+			}
+		}
+
+		&:nth-child(3) { // 3rd place
+			background-color: hsl(30, 61%, 80%);
+
+			th, td {
+				border-color: #E3B88C;
+			}
+		}
+
+		&.assassinated td {
+			position: relative;
+			color: red;
+
+			&:before {
+				content: "";
+				position: absolute;
+				top: 50%;
+				left: 0;
+				border-bottom: 1px solid darkred;
+				width: 100%;
+			}
+		}
+	}
+
+	th, td {
+		text-align: center;
+	}
+}
+
 @media screen and (max-width: 767px) {
 	.content {
 		padding-bottom: 88px;

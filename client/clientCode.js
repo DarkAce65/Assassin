@@ -60,6 +60,6 @@ Template.target.events({
 
 Template.leaderboard.helpers({
 	"userList": function() {
-		return Meteor.users.find({}, {sort: {"assassinations": 1}}).fetch();
+		return Meteor.users.find({}, {sort: {"assassinations": -1}}).fetch();
 	}
 });

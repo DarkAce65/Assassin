@@ -2,9 +2,24 @@
 	<div id="leaderboard" class="panel panel-default">
 		<div class="panel-heading">Leaderboard</div>
 		<div class="panel-body">
-			{{#each user in userList}}
-			<div>{{user.profile.name}} - {{user.assassinations}}</div>
-			{{/each}}
+			<div class="table-responsive">
+				<table id="leaderboardTable" class="table table-striped table-hover">
+					<thead>
+						<tr>
+							<th>Assassin</th>
+							<th>Kills</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#each user in userList}}
+							<tr>
+								<td>{{user.profile.name}}</td>
+								<td>{{user.assassinations}}</td>
+							</tr>
+						{{/each}}
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 </template>

@@ -19,4 +19,39 @@
 			{{/each}}
 		</div>
 	</div>
+	<div id="userList" class="panel panel-default">
+		<div class="panel-heading">
+			<div class="row">
+				<div class="col-xs-6">Player List</div>
+			</div>
+		</div>
+		<div class="panel-body">
+			<div class="table-responsive">
+				<table id="userList" class="table table-striped table-hover">
+					<thead>
+						<tr>
+							<th>Assassin</th>
+							<th>Target</th>
+							<th>Kills</th>
+							<th>Controls</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#each userList}}
+							<tr>
+								<td><i class="fa {{aliveIcon}}"></i> {{profile.name}}</td>
+								<td>{{targetName}}</td>
+								<td>{{kills}}</td>
+								<td>
+									<div class="btn-group btn-group-sm">
+										<button class="btn btn-primary reassignTarget">Reassign target</button>
+									</div>
+								</td>
+							</tr>
+						{{/each}}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 </template>

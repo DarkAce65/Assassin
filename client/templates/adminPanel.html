@@ -5,4 +5,19 @@
 
 		</div>
 	</div>
+	<div id="actionLog" class="panel panel-default">
+		<div class="panel-heading">
+			<div class="row">
+				<div class="col-xs-6">Action Log</div>
+			</div>
+		</div>
+		<div class="panel-body">
+			{{#each actions}}
+			{{#if equals type "kill"}}
+			<p>{{calendarTime timestamp}} - {{{message}}}</p>
+			<div style="height: 10px; border-top: 1px solid gray;"></div>
+			{{/if}}
+			{{/each}}
+		</div>
+	</div>
 </template>

@@ -107,7 +107,6 @@ Template.target.helpers({
 Template.target.events({
 	"click #killTarget": function(e) {
 		e.preventDefault();
-		e.target.disabled = true;
 		Meteor.call("killTarget", Meteor.user().target);
 	},
 	"click .confirmKill": function(e) {

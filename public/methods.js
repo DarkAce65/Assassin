@@ -14,8 +14,11 @@ Meteor.methods({
 	},
 	"confirmKill": function(actionLogId) {
 		if(actionLogId) {
-			var action = Actions.findOne({"_id": actionLogId, "target": this.userId});
+			var action = Actions.findOne({"_id": actionLogId, "assassin": {$ne: this.userId}});
 			if(action) {
+				if(action.target !== this.userId && !Roles.userIsInRole(this.userId, "admin")) {
+					throw new Meteor.Error(401, "You are not authorized to rule this action.");
+				}
 				Actions.update(actionLogId, {
 					$set: {"confirmed": true}
 				});
@@ -28,4 +31,5 @@ Meteor.methods({
 				});
 			}
 		}
+	}
 });

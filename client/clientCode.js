@@ -87,11 +87,19 @@ Template.adminPanel.events({
 	},
 	"click .ruleAssassin": function(e) {
 		e.preventDefault();
-		Meteor.call("confirmKill", this._id);
+		Meteor.call("confirmKill", this._id, function(error) {
+			if(error) {
+				alert(error);
+			}
+		});
 	},
 	"click .ruleTarget": function(e) {
 		e.preventDefault();
-		Meteor.call("ruleTarget", this._id);
+		Meteor.call("ruleTarget", this._id, function(error) {
+			if(error) {
+				alert(error);
+			}
+		});
 	}
 });
 

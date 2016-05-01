@@ -131,10 +131,22 @@ Template.adminPanel.events({
 			}
 		});
 	},
-	"show.bs.modal #reassignTargetModal": function(e) {
+	"show.bs.modal #controlPanel": function(e) {
 		var a = $(e.relatedTarget).data("assassin");
 		Session.set("reassignAssassin", a);
-		$(e.target).find("#assassinName").text(Meteor.users.findOne(a).profile.name);
+		var name = Meteor.users.findOne(a).profile.name;
+		$(e.target).find("#name").val(name);
+		$(e.target).find(".assassinName").text(name);
+	},
+	"click #changeDisplayName": function(e) {
+		var input = $(e.target).closest(".modal").find("#name");
+		var name = input.val();
+		input.val("");
+		Meteor.call("changeDisplayName", Session.get("reassignAssassin"), name, function(error) {
+			if(error) {
+				alert(error);
+			}
+		});
 	},
 	"click #reassignTarget": function(e) {
 		var input = $(e.target).closest(".modal").find("#target");

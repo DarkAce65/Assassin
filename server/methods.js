@@ -107,6 +107,14 @@ Meteor.methods({
 			Actions.remove(actionLogId);
 		}
 	},
+	"changeDisplayName": function(userId, name) {
+		if(this.userId !== userId && !Roles.userIsInRole(this.userId, "admin")) {
+			throw new Meteor.Error(401, "You are not authorized to change other people's display names.");
+		}
+		if(userId && name) {
+			Meteor.users.update(userId, {$set: {"profile.name": name}});
+		}
+	},
 	"reassignTarget": function(assassin, target) {
 		if(!Roles.userIsInRole(this.userId, "admin")) {
 			throw new Meteor.Error(401, "You are not authorized to reassign targets.");

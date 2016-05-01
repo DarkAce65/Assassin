@@ -5,6 +5,9 @@
 			<div class="col-sm-4">
 				<div class="list-group">
 					<div class="list-group-item list-group-item-divider">{{currentUser.profile.name}}{{#if isInRole "admin"}} <small>Admin</small>{{/if}}</div>
+					{{#if isInRole "admin"}}
+					<a href="{{pathFor 'adminPanel'}}" class="list-group-item{{activeRoute 'adminPanel'}}"><i class="fa fa-fw fa-dashboard"></i> Admin Panel</a>
+					{{/if}}
 					{{#if currentUser.inGame}}
 					<a href="{{pathFor 'target'}}" class="list-group-item{{activeRoute 'target'}}"><i class="fa fa-fw fa-bullseye"></i> Target</a>
 					{{/if}}

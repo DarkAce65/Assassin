@@ -71,7 +71,7 @@ Meteor.methods({
 	},
 	"confirmKill": function(actionLogId) {
 		if(actionLogId) {
-			var action = Actions.findOne({"_id": actionLogId, "target": this.userId});
+			var action = Actions.findOne({"_id": actionLogId, "assassin": {$ne: this.userId}});
 			if(action) {
 				Actions.update(actionLogId, {
 					$set: {"confirmed": true}

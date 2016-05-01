@@ -14,7 +14,7 @@ Meteor.publish("adminInfo", function() {
 	}
 
 	return [
-		Meteor.users.find({"inGame": true}, {
+		Meteor.users.find({}, {
 			fields: {
 				"alive": 1,
 				"inGame": 1,

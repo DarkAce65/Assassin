@@ -95,5 +95,10 @@ Meteor.methods({
 				});
 			}
 		}
+	},
+	"ruleTarget": function(actionLogId) {
+		if(actionLogId) {
+			Actions.remove(actionLogId);
+		}
 	}
 });

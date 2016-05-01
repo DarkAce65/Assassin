@@ -84,6 +84,14 @@ Template.adminPanel.events({
 				Meteor.call("startGame");
 			}
 		});
+	},
+	"click .ruleAssassin": function(e) {
+		e.preventDefault();
+		Meteor.call("confirmKill", this._id);
+	},
+	"click .ruleTarget": function(e) {
+		e.preventDefault();
+		Meteor.call("ruleTarget", this._id);
 	}
 });
 

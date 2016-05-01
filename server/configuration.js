@@ -8,13 +8,10 @@ Accounts.onCreateUser(function(options, user) {
 	return user;
 });
 
-Meteor.publish("userInfo", function() {
+Meteor.publish("target", function() {
 	return Meteor.users.find(this.userId, {
 		fields: {
-			"inGame": 1,
-			"alive": 1,
-			"target": 1,
-			"kills": 1
+			"target": 1
 		}
 	});
 });

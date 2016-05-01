@@ -47,6 +47,7 @@ Meteor.methods({
 			throw new Meteor.Error(401, "You are not authorized to start the game.");
 		}
 		Meteor.call("assignRandomTargets");
+		Actions.remove({});
 		Meteor.users.update({}, {
 			$set: {
 				"inGame": true,

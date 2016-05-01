@@ -75,6 +75,9 @@ Template.target.helpers({
 	},
 	"killTargetAvailable": function() {
 		var action = Actions.find({"assassin": Meteor.userId()}, {sort: {"timestamp": -1}}).fetch()[0];
+		if(!Meteor.user().alive) {
+			return "disabled";
+		}
 		if(!action || action.confirmed) {
 			return "";
 		}

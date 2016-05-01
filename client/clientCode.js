@@ -69,6 +69,12 @@ Template.adminPanel.helpers({
 	}
 });
 
+Template.adminPanel.events({
+	"click #startGame": function() {
+		Meteor.call("startGame");
+	}
+});
+
 Template.target.helpers({
 	"target": function() {
 		return Meteor.users.findOne(Meteor.user().target).profile.name;

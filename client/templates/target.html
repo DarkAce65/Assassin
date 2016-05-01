@@ -11,7 +11,7 @@
 					<p class="lead">{{target}}</p>
 				</div>
 			</div>
-			<button id="killTarget" class="btn btn-sm btn-danger">I killed my target</button>
+			<button id="killTarget" class="btn btn-sm btn-danger" {{killTargetAvailable}}>I killed my target</button>
 		</div>
 	</div>
 	{{#if currentUser.kills}}

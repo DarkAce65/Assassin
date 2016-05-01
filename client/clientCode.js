@@ -50,9 +50,37 @@ Template.login.events({
 	}
 });
 
+Template.adminPanel.helpers({
+	"actions": function() {
+		return Actions.find({}, {sort: {"timestamp": -1}}).fetch();
+	},
+	"message": function() {
+		var a = "Unknown";
+		var m = "claims to have killed";
+		var t = "Unknown";
+		var assassin = Meteor.users.findOne(this.assassin);
+		var target = Meteor.users.findOne(this.target);
+
+		if(assassin) {a = assassin.profile.name;}
+		if(target) {t = target.profile.name;}
+		if(this.confirmed) {m = "killed";}
+
+		return "<b>" + a + "</b> " + m + " <b>" + t + "</b>";
+	}
+});
+
 Template.target.helpers({
 	"target": function() {
 		return Meteor.users.findOne(Meteor.user().target).profile.name;
+	},
+	"killTargetAvailable": function() {
+		var action = Actions.find({"assassin": Meteor.userId()}, {sort: {"timestamp": -1}}).fetch()[0];
+		if(!action || action.confirmed) {
+			return "";
+		}
+		else {
+			return "disabled";
+		}
 	},
 	"actions": function() {
 		return Actions.find({}, {sort: {"timestamp": -1}}).fetch();
@@ -79,6 +107,7 @@ Template.target.helpers({
 Template.target.events({
 	"click #killTarget": function(e) {
 		e.preventDefault();
+		e.target.disabled = true;
 		Meteor.call("killTarget", Meteor.user().target);
 	},
 	"click .confirmKill": function(e) {

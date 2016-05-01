@@ -1,5 +1,5 @@
 <template name="target">
-	<div id="target" class="panel panel-default">
+	<div id="target" class="panel panel-primary">
 		<div class="panel-heading">Target</div>
 		<div class="panel-body">
 			<div class="media">
@@ -11,11 +11,11 @@
 					<p class="lead">{{target}}</p>
 				</div>
 			</div>
-			<button id="killTarget" class="btn btn-sm btn-danger" {{killTargetAvailable}}>I killed my target</button>
+			<button id="killTarget" class="btn btn-sm btn-danger" {{killTargetAvailable}}>{{#if equals killTargetAvailable "disabled"}}Waiting for confirmation from target{{else}}I killed my target{{/if}}</button>
 		</div>
 	</div>
 	{{#if actions}}
-	<div id="actionLog" class="panel panel-default">
+	<div id="actionLog" class="panel panel-danger">
 		<div class="panel-heading">
 			<div class="row">
 				<div class="col-xs-6">Action Log</div>

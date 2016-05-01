@@ -1,5 +1,7 @@
 @import "lib/custom.bootstrap/custom.bootstrap.import.less";
 
+@import url("https://fonts.googleapis.com/css?family=Lato:400,300,700");
+
 * {
 	outline: 0;
 }
@@ -9,18 +11,31 @@ html {
 }
 
 body {
+	font-family: "Lato";
 	min-height: 100%;
 	position: relative;
+	background: url("/background.jpg") no-repeat fixed 50% 50% / cover #2F2F2F;
 }
 
 html, body {
 	overflow-x: hidden;
 }
 
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6,
+.panel-heading, .list-group-item-divider {
+	font-variant: small-caps;
+}
+
 .list-group-item-divider {
-	color: #333;
+	color: white;
 	font-weight: bold;
-	background-color: whitesmoke;
+	background-color: maroon;
+	border-color: maroon;
+
+	small {
+		font-weight: normal;
+	}
 }
 
 fieldset.hrText {
@@ -48,10 +63,10 @@ fieldset.hrText {
 	left: 0;
 	bottom: 0;
 	padding: 20px 0;
-	background-color: whitesmoke;
+	background-color: #333;
 	text-align: center;
 	font-variant: small-caps;
-	border-top: 3px solid darkorange;
+	border-top: 3px solid #EF5350;
 
 	.nav p, .nav a {
 		color: lighten(#333, 26%);

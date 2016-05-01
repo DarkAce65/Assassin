@@ -206,10 +206,12 @@ Template.target.events({
 	"click #killTarget": function(e) {
 		e.preventDefault();
 		swal({
-			title: "Are you sure?",
-			type: "info",
+			title: "Confirmation",
+			text: "Please confirm that you have killed " + Meteor.users.findOne(Meteor.user().target).profile.name,
+			type: "warning",
 			showCancelButton: true,
 			confirmButtonText: "Yes",
+			confirmButtonColor: "#d9534f",
 			cancelButtonText: "No",
 		},
 		function(confirmed) {

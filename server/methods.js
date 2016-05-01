@@ -70,11 +70,16 @@ Meteor.methods({
 	},
 	"confirmKill": function(actionLogId) {
 		if(actionLogId) {
-			if(Actions.findOne({"_id": actionLogId, "target": this.userId})) {
+			var action = Actions.findOne({"_id": actionLogId, "target": this.userId});
+			if(action) {
 				Actions.update(actionLogId, {
 					$set: {"confirmed": true}
 				});
-				Meteor.users.update(this.userId, {
+				Meteor.users.update(action.assassin, {
+					$inc: {"kills": 1},
+					$set: {"target": Meteor.users.findOne(action.target).target}
+				});
+				Meteor.users.update(action.target, {
 					$set: {"alive": false}
 				});
 			}

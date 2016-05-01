@@ -77,7 +77,25 @@ Template.adminPanel.helpers({
 		return "fa-times";
 	},
 	"targetName": function() {
-		return Meteor.users.findOne(this.target).profile.name;
+		var target = Meteor.users.findOne(this.target);
+		if(target) {
+			return Meteor.users.findOne(this.target).profile.name;
+		}
+		return "Unknown";
+	},
+	settings: function() {
+		return {
+			position: "bottom",
+			limit: 8,
+			rules: [
+				{
+					collection: Meteor.users,
+					filter: {"_id": {$ne: Session.get("reassignAssassin")}},
+					field: "profile.name",
+					template: Template.userOption
+				}
+			]
+		};
 	}
 });
 
@@ -112,6 +130,36 @@ Template.adminPanel.events({
 				alert(error);
 			}
 		});
+	},
+	"show.bs.modal #reassignTargetModal": function(e) {
+		var a = $(e.relatedTarget).data("assassin");
+		Session.set("reassignAssassin", a);
+		$(e.target).find("#assassinName").text(Meteor.users.findOne(a).profile.name);
+	},
+	"click #reassignTarget": function(e) {
+		var input = $(e.target).closest(".modal").find("#target");
+		var name = input.val();
+		input.val("");
+		var newTarget = Meteor.users.findOne({"profile.name": name});
+		if(newTarget) {
+			Meteor.call("reassignTarget", Session.get("reassignAssassin"), newTarget._id, function(error) {
+				if(error) {
+					alert(error);
+				}
+			});
+		}
+		else {
+			alert("Please pick a name from the list.");
+		}
+	}
+});
+
+Template.userOption.helpers({
+	"style": function() {
+		if(this.alive) {
+			return {class: "label label-primary"};
+		}
+		return {class: "label label-danger"};
 	}
 });
 

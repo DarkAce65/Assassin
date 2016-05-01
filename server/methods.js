@@ -106,5 +106,13 @@ Meteor.methods({
 		if(actionLogId) {
 			Actions.remove(actionLogId);
 		}
+	},
+	"reassignTarget": function(assassin, target) {
+		if(!Roles.userIsInRole(this.userId, "admin")) {
+			throw new Meteor.Error(401, "You are not authorized to reassign targets.");
+		}
+		if(assassin && target) {
+			Meteor.users.update(assassin, {$set: {"target": target}});
+		}
 	}
 });

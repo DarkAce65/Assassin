@@ -20,6 +20,7 @@ ecmascript              # Enable ECMAScript2015+ syntax in app code
 #autopublish             # Publish all data to the clients (for prototyping)
 insecure                # Allow all DB writes from clients (for prototyping)
 
+session
 less
 iron:router
 useraccounts:iron-routing
@@ -28,6 +29,7 @@ accounts-google
 accounts-facebook
 service-configuration
 alanning:roles
+mizzao:autocomplete
 momentjs:moment
 nemo64:bootstrap
 fortawesome:fontawesome

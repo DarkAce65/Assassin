@@ -68,7 +68,7 @@ Template.adminPanel.helpers({
 		return "<b>" + a + "</b> " + m + " <b>" + t + "</b>";
 	},
 	"userList": function() {
-		return Meteor.users.find({}, {sort: {"alive": -1, "profile.name": -1}}).fetch();
+		return Meteor.users.find({}, {sort: {"alive": -1, "profile.name": 1}}).fetch();
 	},
 	"aliveIcon": function() {
 		if(this.alive) {

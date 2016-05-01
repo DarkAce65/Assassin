@@ -71,7 +71,19 @@ Template.adminPanel.helpers({
 
 Template.adminPanel.events({
 	"click #startGame": function() {
-		Meteor.call("startGame");
+		swal({
+			title: "Are you sure you want to start a new game?",
+			text: "This will reset all scores, empty the action log and assign new targets. Note: This is a destructive action.",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonText: "Yes",
+			cancelButtonText: "No",
+		},
+		function(confirmed) {
+			if(confirmed) {
+				Meteor.call("startGame");
+			}
+		});
 	}
 });
 
@@ -108,6 +120,7 @@ Template.target.helpers({
 		if(this.target === Meteor.userId()) {t = "You"; c = '<br><span>Is this correct? <a href="#" class="confirmKill" style="color: green;">Yes</a> / <a href="#" class="denyKill" style="color: red;">No</a></span>';}
 		else if(target) {t = target.profile.name;}
 		if(this.confirmed) {m = "killed"; c = "";}
+		if(this.type === "contested") {c = "<br><i>An admin will attempt to fix this as soon as possible.</i>";}
 
 		return "<b>" + a + "</b> " + m + " <b>" + t + "</b>" + c;
 	}
@@ -116,7 +129,18 @@ Template.target.helpers({
 Template.target.events({
 	"click #killTarget": function(e) {
 		e.preventDefault();
-		Meteor.call("killTarget", Meteor.user().target);
+		swal({
+			title: "Are you sure?",
+			type: "info",
+			showCancelButton: true,
+			confirmButtonText: "Yes",
+			cancelButtonText: "No",
+		},
+		function(confirmed) {
+			if(confirmed) {
+				Meteor.call("killTarget", Meteor.user().target);
+			}
+		});
 	},
 	"click .confirmKill": function(e) {
 		e.preventDefault();
@@ -124,7 +148,7 @@ Template.target.events({
 	},
 	"click .denyKill": function(e) {
 		e.preventDefault();
-		// TODO: denyKill
+		Meteor.call("denyKill", this._id);
 	}
 });
 

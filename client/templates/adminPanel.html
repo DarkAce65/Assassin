@@ -13,10 +13,9 @@
 		</div>
 		<div class="panel-body">
 			{{#each actions}}
-			{{#if equals type "kill"}}
-			<p>{{calendarTime timestamp}} - {{{message}}}</p>
+			<p>{{#if equals type "contested"}}<b>CONTESTED:</b> {{/if}}{{calendarTime timestamp}} - {{{message}}}</p>
+			{{#if equals type "contested"}}<p style="font-style: italic;">Rule in favor of <a href="#" class="ruleAssassin" style="color: blue;">Assassin</a> / <a href="#" class="ruleTarget" style="color: blue;">Target</a></p>{{/if}}
 			<div style="height: 10px; border-top: 1px solid gray;"></div>
-			{{/if}}
 			{{/each}}
 		</div>
 	</div>

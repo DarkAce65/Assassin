@@ -85,5 +85,15 @@ Meteor.methods({
 				});
 			}
 		}
+	},
+	"denyKill": function(actionLogId) {
+		if(actionLogId) {
+			var action = Actions.findOne({"_id": actionLogId, "target": this.userId});
+			if(action) {
+				Actions.update(actionLogId, {
+					$set: {"type": "contested"}
+				});
+			}
+		}
 	}
 });

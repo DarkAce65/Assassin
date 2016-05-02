@@ -70,6 +70,9 @@ Template.adminPanel.helpers({
 	"userList": function() {
 		return Meteor.users.find({}, {sort: {"alive": -1, "profile.name": 1}}).fetch();
 	},
+	"playerCount": function() {
+		return Meteor.users.find().count();
+	},
 	"aliveIcon": function() {
 		if(this.alive) {
 			return "fa-check";

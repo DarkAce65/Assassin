@@ -63,11 +63,11 @@ Template.adminPanel.helpers({
 	"playerCount": function() {
 		return Meteor.users.find().count();
 	},
-	"aliveIcon": function() {
+	"statusStyle": function() {
 		if(this.alive) {
-			return "fa-check";
+			return "color: #333;";
 		}
-		return "fa-times";
+		return "color: red; text-decoration: line-through;";
 	},
 	"targetName": function() {
 		var target = Meteor.users.findOne(this.target);

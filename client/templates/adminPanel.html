@@ -40,8 +40,8 @@
 					<tbody>
 						{{#each userList}}
 							<tr>
-								<td><i class="fa {{aliveIcon}}"></i> {{profile.name}}</td>
-								<td>{{targetName}}</td>
+								<td style="{{statusStyle}}">{{profile.name}}</td>
+								<td><span style="color: #333; background-color: #333;">{{targetName}}</span></td>
 								<td>{{kills}}</td>
 								<td><button data-toggle="modal" data-target="#controlPanel" data-assassin="{{_id}}" class="btn btn-sm btn-primary">Open Controls</button></td>
 							</tr>

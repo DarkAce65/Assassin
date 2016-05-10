@@ -1,3 +1,7 @@
+Accounts.config({
+	"restrictCreationByEmailDomain": Meteor.settings.public.restrictedDomain
+});
+
 Accounts.onCreateUser(function(options, user) {
 	user.inGame = false;
 

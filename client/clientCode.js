@@ -29,7 +29,7 @@ Template.navigation.events({
 
 Template.login.events({
 	"click #googleLogin": function(e) {
-		Meteor.loginWithGoogle(function(error) {
+		Meteor.loginWithGoogle({"loginUrlParameters": {"hd": Meteor.settings.public.restrictedDomain}}, function(error) {
 			if(error) {
 				alert(error);
 			}

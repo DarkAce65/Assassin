@@ -93,7 +93,7 @@ Template.adminPanel.helpers({
 			rules: [
 				{
 					collection: Meteor.users,
-					filter: {"_id": {$ne: Session.get("reassignAssassin")}},
+					filter: {"_id": {$ne: Session.get("configureAssassin")}},
 					field: "profile.name",
 					template: Template.userOption
 				}
@@ -137,7 +137,7 @@ Template.adminPanel.events({
 	},
 	"show.bs.modal #controlPanel": function(e) {
 		var a = $(e.relatedTarget).data("assassin");
-		Session.set("reassignAssassin", a);
+		Session.set("configureAssassin", a);
 		var name = Meteor.users.findOne(a).profile.name;
 		$(e.target).find("#name").val(name);
 		$(e.target).find(".assassinName").text(name);
@@ -146,7 +146,7 @@ Template.adminPanel.events({
 		var input = $(e.target).closest(".modal").find("#name");
 		var name = input.val();
 		input.val("");
-		Meteor.call("changeDisplayName", Session.get("reassignAssassin"), name, function(error) {
+		Meteor.call("changeDisplayName", Session.get("configureAssassin"), name, function(error) {
 			if(error) {
 				alert(error);
 			}
@@ -158,7 +158,7 @@ Template.adminPanel.events({
 		input.val("");
 		var newTarget = Meteor.users.findOne({"profile.name": name});
 		if(newTarget) {
-			Meteor.call("reassignTarget", Session.get("reassignAssassin"), newTarget._id, function(error) {
+			Meteor.call("reassignTarget", Session.get("configureAssassin"), newTarget._id, function(error) {
 				if(error) {
 					alert(error);
 				}

@@ -51,24 +51,31 @@
 			</div>
 		</div>
 	</div>
-	<div id="controlPanel" class="modal fade" tabindex="-1">
+	<div id="controlPanel" class="modal fade" tabindex="-1" data-backdrop="static">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
 					<h4 class="modal-title">Control Panel</h4>
 				</div>
 				<div class="modal-body">
 					<p>Change <span class="assassinName" style="font-weight: bold;">Unknown</span>'s display name to...</p>
-					<input id="name" class="form-control" placeholder="Display Name">
+					<div class="input-group">
+						<input id="name" class="form-control" placeholder="Display Name">
+						<span class="input-group-btn">
+							<button id="changeDisplayName" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-fw fa-angle-double-right"></i></button>
+						</span>
+					</div>
 					<hr>
 					<p>Reassign <span class="assassinName" style="font-weight: bold;">Unknown</span>'s target to...</p>
-					{{>inputAutocomplete settings=settings id="target" class="form-control" placeholder="Target"}}
+					<div class="input-group">
+						{{>inputAutocomplete settings=settings id="target" class="form-control" placeholder="Target"}}
+						<span class="input-group-btn">
+							<button id="reassignTarget" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-fw fa-crosshairs"></i></button>
+						</span>
+				</div>
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-default" data-dismiss="modal">Cancel</button>
-					<button id="changeDisplayName" class="btn btn-primary" data-dismiss="modal">Change Display Name</button>
-					<button id="reassignTarget" class="btn btn-primary" data-dismiss="modal">Reassign Target</button>
 				</div>
 			</div>
 		</div>

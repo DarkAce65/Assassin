@@ -46,16 +46,26 @@ Template.adminPanel.helpers({
 	},
 	"message": function() {
 		var a = "Unknown";
-		var m = "claims to have killed";
 		var t = "Unknown";
+		var c = "";
 		var assassin = Meteor.users.findOne(this.assassin);
 		var target = Meteor.users.findOne(this.target);
 
 		if(assassin) {a = assassin.profile.name;}
 		if(target) {t = target.profile.name;}
-		if(this.confirmed) {m = "killed";}
 
-		return "<b>" + a + "</b> " + m + " <b>" + t + "</b>";
+		if(this.type === "quit") {
+			return "<b>" + a + "</b> quit the game";
+		}
+		if(!this.confirmed) {
+			c = '<br><span style="color: red;">Waiting for previous target to press "I Was Killed" before updating kill count</span>';
+			var prevTarget = Meteor.users.findOne(assassin.target);
+			if(prevTarget) {
+				c = '<br><span style="color: red;">Waiting for <b>' + prevTarget.profile.name + '</b> to press "I Was Killed" before updating kill count</span>';
+			}
+		}
+
+		return "<b>" + a + "</b> assassinated <b>" + t + "</b>" + c;
 	},
 	"userList": function() {
 		return Meteor.users.find({}, {sort: {"alive": -1, "profile.name": 1}}).fetch();
@@ -100,6 +110,7 @@ Template.adminPanel.events({
 			type: "warning",
 			showCancelButton: true,
 			confirmButtonText: "Yes",
+			confirmButtonColor: "#d9534f",
 			cancelButtonText: "No",
 		},
 		function(confirmed) {
@@ -162,76 +173,84 @@ Template.adminPanel.events({
 Template.userOption.helpers({
 	"style": function() {
 		if(this.alive) {
-			return {class: "label label-primary"};
+			return {};
 		}
-		return {class: "label label-danger"};
+		return {style: "color: red; text-decoration: line-through;"};
 	}
 });
 
 Template.target.helpers({
+	"alive": function() {
+		if(Meteor.user()) {
+			return Meteor.user().alive;
+		}
+		return false;
+	},
 	"target": function() {
 		return Meteor.users.findOne(Meteor.user().target).profile.name;
-	},
-	"killTargetAvailable": function() {
-		var action = Actions.find({"assassin": Meteor.userId()}, {sort: {"timestamp": -1}}).fetch()[0];
-		if(!Meteor.user().alive) {
-			return "disabled";
-		}
-		if(!action || action.confirmed) {
-			return "";
-		}
-		else {
-			return "disabled";
-		}
 	},
 	"actions": function() {
 		return Actions.find({}, {sort: {"timestamp": -1}}).fetch();
 	},
 	"message": function() {
 		var a = "Unknown";
-		var m = "claims to have killed";
 		var t = "Unknown";
 		var c = "";
 		var assassin = Meteor.users.findOne(this.assassin);
 		var target = Meteor.users.findOne(this.target);
 
-		if(this.assassin === Meteor.userId()) {a = "You"; m = "claim to have killed";}
+		if(this.assassin === Meteor.userId()) {a = "You";}
 		else if(assassin) {a = assassin.profile.name;}
-
-		if(this.target === Meteor.userId()) {t = "You"; c = '<br><span>Is this correct? <a href="#" class="confirmKill" style="color: green;">Yes</a> / <a href="#" class="denyKill" style="color: red;">No</a></span>';}
+		if(this.target === Meteor.userId()) {t = "You";}
 		else if(target) {t = target.profile.name;}
-		if(this.confirmed) {m = "killed"; c = "";}
-		if(this.type === "contested") {c = "<br><i>An admin will attempt to fix this as soon as possible.</i>";}
 
-		return "<b>" + a + "</b> " + m + " <b>" + t + "</b>" + c;
+		if(this.type === "quit") {
+			return "<b>" + a + "</b> quit the game";
+		}
+		if(!this.confirmed && this.assassin === Meteor.userId()) {
+			c = '<br><span style="color: red;">Waiting for previous target to press "I Was Killed" before updating kill count</span>';
+			var prevTarget = Meteor.users.findOne(assassin.target);
+			if(prevTarget) {
+				c = '<br><span style="color: red;">Waiting for <b>' + prevTarget.profile.name + '</b> to press "I Was Killed" before updating kill count</span>';
+			}
+		}
+
+		return "<b>" + a + "</b> assassinated <b>" + t + "</b>" + c;
+	},
+	settings: function() {
+		return {
+			position: "bottom",
+			limit: 8,
+			rules: [
+				{
+					collection: Meteor.users,
+					filter: {"_id": {$ne: Meteor.userId()}},
+					field: "profile.name",
+					template: Template.userOption
+				}
+			]
+		};
 	}
 });
 
 Template.target.events({
-	"click #killTarget": function(e) {
-		e.preventDefault();
-		swal({
-			title: "Confirmation",
-			text: "Please confirm that you have killed " + Meteor.users.findOne(Meteor.user().target).profile.name,
-			type: "warning",
-			showCancelButton: true,
-			confirmButtonText: "Yes",
-			confirmButtonColor: "#d9534f",
-			cancelButtonText: "No",
-		},
-		function(confirmed) {
-			if(confirmed) {
-				Meteor.call("killTarget", Meteor.user().target);
+	"click #killed": function(e) {
+		var input = $(e.target).closest(".modal").find("#assassin");
+		var assassinName = input.val();
+		input.val("");
+		var assassin = Meteor.users.findOne({"profile.name": assassinName});
+		Meteor.call("killed", assassin._id, function(error) {
+			if(error) {
+				alert(error);
 			}
 		});
 	},
-	"click .confirmKill": function(e) {
-		e.preventDefault();
-		Meteor.call("confirmKill", this._id);
-	},
-	"click .denyKill": function(e) {
-		e.preventDefault();
-		Meteor.call("denyKill", this._id);
+	"click #quit": function(e) {
+		Meteor.call("quit", function(error) {
+			if(error) {
+				alert(error);
+			}
+		});
 	}
 });
 

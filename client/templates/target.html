@@ -7,11 +7,16 @@
 					<img class="media-object" src="/favicon.png" style="width: 64px; height: 64px;">
 				</div>
 				<div class="media-body">
-					<h2 class="media-heading" style="color: red;">Current Target</h2>
-					<p class="lead">{{target}}</p>
+					<h2 class="media-heading" style="color: red;">{{#if alive}}Current Target{{else}}You are dead{{/if}}</h2>
+					<p class="lead">{{#if alive}}{{target}}{{else}}¯\_(ツ)_/¯{{/if}}</p>
 				</div>
 			</div>
-			<button id="killTarget" class="btn btn-sm btn-danger" {{killTargetAvailable}}>{{#if equals killTargetAvailable "disabled"}}Waiting for confirmation from target{{else}}I killed my target{{/if}}</button>
+			{{#if alive}}
+			<div class="btn-group btn-group-sm">
+				<button data-toggle="modal" data-target="#killModal" class="btn btn-primary">I Was Killed</button>
+				<button data-toggle="modal" data-target="#quitModal" class="btn btn-danger">Quit Game</button>
+			</div>
+			{{/if}}
 		</div>
 	</div>
 	{{#if actions}}
@@ -24,10 +29,47 @@
 		</div>
 		<div class="panel-body">
 			{{#each actions}}
-			<p>{{#if equals type "contested"}}<b>CONTESTED:</b> {{/if}}{{calendarTime timestamp}} <i class="blade">▬ι══ﺤ</i> {{{message}}}</p>
+			<div class="row">
+				<div class="col-sm-3">{{calendarTime timestamp}}</div>
+				<div class="col-sm-9">
+					<p><i class="blade">▬ι══ﺤ</i> {{{message}}}</p>
+				</div>
+			</div>
 			<div style="height: 10px; border-top: 1px solid gray;"></div>
 			{{/each}}
 		</div>
 	</div>
 	{{/if}}
+	<div id="killModal" class="modal fade" tabindex="-1" data-backdrop="static">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+					<h4 class="modal-title">You have been assassinated</h4>
+				</div>
+				<div class="modal-body">
+					<p>I was killed by</p>
+					{{>inputAutocomplete settings=settings id="assassin" class="form-control" placeholder="Assassin"}}
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-default" data-dismiss="modal">No, I think I would've remembered dying</button>
+					<button id="killed" class="btn btn-danger" data-dismiss="modal">Yes, I have been slain</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="quitModal" class="modal fade" tabindex="-1" data-backdrop="static">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+					<h4 class="modal-title">You are quitting the game</h4>
+				</div>
+				<div class="modal-body">
+					<button class="btn btn-default" data-dismiss="modal">No, why would I quit?</button>
+					<button id="quit" class="btn btn-danger" data-dismiss="modal">Yes, let me out</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>

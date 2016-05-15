@@ -13,8 +13,12 @@
 		</div>
 		<div class="panel-body">
 			{{#each actions}}
-			<p>{{#if equals type "contested"}}<b>CONTESTED:</b> {{/if}}{{calendarTime timestamp}} - {{{message}}}</p>
-			{{#if equals type "contested"}}<p style="font-style: italic;">Rule in favor of <a href="#" class="ruleAssassin" style="color: blue;">Assassin</a> / <a href="#" class="ruleTarget" style="color: blue;">Target</a></p>{{/if}}
+			<div class="row">
+				<div class="col-sm-3">{{calendarTime timestamp}}</div>
+				<div class="col-sm-9">
+					<p><i class="blade">▬ι══ﺤ</i> {{{message}}}</p>
+				</div>
+			</div>
 			<div style="height: 10px; border-top: 1px solid gray;"></div>
 			{{/each}}
 		</div>
@@ -72,7 +76,7 @@
 						<span class="input-group-btn">
 							<button id="reassignTarget" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-fw fa-crosshairs"></i></button>
 						</span>
-				</div>
+					</div>
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-default" data-dismiss="modal">Cancel</button>

@@ -56,55 +56,135 @@ Meteor.methods({
 			}
 		}, {multi: true});
 	},
-	"killTarget": function(targetId) {
-		if(targetId) {
-			if(!Actions.findOne({"assassin": this.userId, "target": targetId})) {
+	"killed": function(assassinId) {
+		var user = Meteor.users.findOne(this.userId);
+		if(!user.inGame) {
+			throw new Meteor.Error(401, "You are not in the game.");
+		}
+		if(!user.alive) {
+			throw new Meteor.Error(401, "You are not alive.");
+		}
+		var assassin = Meteor.users.findOne(assassinId);
+		if(!assassin) {
+			throw new Meteor.Error(404, "Assassin not found.");
+		}
+		if(!assassin.inGame) {
+			throw new Meteor.Error(400, "Assassin is not in the game.");
+		}
+		if(!assassin.alive) {
+			throw new Meteor.Error(400, "Assassin is not alive.");
+		}
+
+		if(!Actions.findOne({"target": this.userId})) {
+			if(user.assassin === assassinId) {
+				do {
+					Actions.upsert({"target": user._id}, {
+						$set: {
+							"timestamp": Date.now(),
+							"type": "kill",
+							"confirmed": true,
+							"assassin": user.assassin,
+							"target": user._id
+						}
+					});
+					Meteor.users.update(user.assassin, {
+						$set: {
+							"target": user.target
+						},
+						$inc: {
+							"kills": 1
+						}
+					});
+					Meteor.users.update(user._id, {
+						$set: {
+							"alive": false
+						}
+					});
+					Meteor.users.update(user.target, {
+						$set: {
+							"assassin": user.assassin
+						}
+					});
+					user = Meteor.users.findOne(user.target);
+				} while(Actions.findOne({"confirmed": false, "target": user._id}));
+			}
+			else {
 				Actions.insert({
 					"timestamp": Date.now(),
 					"type": "kill",
 					"confirmed": false,
-					"assassin": this.userId,
-					"target": targetId
+					"assassin": assassinId,
+					"target": this.userId
+				});
+				Meteor.users.update(this.userId, {
+					$set: {
+						"alive": false
+					}
 				});
 			}
 		}
 	},
-	"confirmKill": function(actionLogId) {
-		if(actionLogId) {
-			var action = Actions.findOne({"_id": actionLogId, "assassin": {$ne: this.userId}});
-			if(action) {
-				if(action.target !== this.userId && !Roles.userIsInRole(this.userId, "admin")) {
-					throw new Meteor.Error(401, "You are not authorized to rule this action.");
+	"quit": function() {
+		var user = Meteor.users.findOne(this.userId);
+		if(!user.inGame) {
+			throw new Meteor.Error(401, "You are not in the game.");
+		}
+		if(!user.alive) {
+			throw new Meteor.Error(401, "You are not alive.");
+		}
+
+		if(!Actions.findOne({"target": this.userId})) {
+			Actions.insert({
+				"timestamp": Date.now(),
+				"type": "quit",
+				"assassin": this.userId
+			});
+			Meteor.users.update(user.assassin, {
+				$set: {
+					"target": user.target
 				}
-				Actions.update(actionLogId, {
-					$set: {"confirmed": true}
+			});
+			Meteor.users.update(this.userId, {
+				$set: {
+					"alive": false
+				}
+			});
+			Meteor.users.update(user.target, {
+				$set: {
+					"assassin": user.assassin
+				}
+			});
+			user = Meteor.users.findOne(user.target);
+			while(Actions.findOne({"confirmed": false, "target": user._id})) {
+				Actions.upsert({"target": user._id}, {
+					$set: {
+						"timestamp": Date.now(),
+						"type": "kill",
+						"confirmed": true,
+						"assassin": user.assassin,
+						"target": user._id
+					}
 				});
-				Meteor.users.update(action.assassin, {
-					$inc: {"kills": 1},
-					$set: {"target": Meteor.users.findOne(action.target).target}
+				Meteor.users.update(user.assassin, {
+					$set: {
+						"target": user.target
+					},
+					$inc: {
+						"kills": 1
+					}
 				});
-				Meteor.users.update(action.target, {
-					$set: {"alive": false}
+				Meteor.users.update(user._id, {
+					$set: {
+						"alive": false
+					}
 				});
+				Meteor.users.update(user.target, {
+					$set: {
+						"assassin": user.assassin
+					}
+				});
+				user = Meteor.users.findOne(user.target);
 			}
-		}
-	},
-	"denyKill": function(actionLogId) {
-		if(actionLogId) {
-			var action = Actions.findOne({"_id": actionLogId, "target": this.userId});
-			if(action) {
-				Actions.update(actionLogId, {
-					$set: {"type": "contested"}
-				});
-			}
-		}
-	},
-	"ruleTarget": function(actionLogId) {
-		if(!Roles.userIsInRole(this.userId, "admin")) {
-			throw new Meteor.Error(401, "You are not authorized to rule this action.");
-		}
-		if(actionLogId) {
-			Actions.remove(actionLogId);
 		}
 	},
 	"changeDisplayName": function(userId, name) {
@@ -112,6 +192,9 @@ Meteor.methods({
 			throw new Meteor.Error(401, "You are not authorized to change other people's display names.");
 		}
 		if(userId && name) {
+			if(!Meteor.users.findOne(userId)) {
+				throw new Meteor.Error(404, "User not found.");
+			}
 			Meteor.users.update(userId, {$set: {"profile.name": name}});
 		}
 	},
@@ -120,6 +203,15 @@ Meteor.methods({
 			throw new Meteor.Error(401, "You are not authorized to reassign targets.");
 		}
 		if(assassin && target) {
+			if(!Meteor.users.findOne(assassin)) {
+				throw new Meteor.Error(404, "Assassin not found.");
+			}
+			if(!Meteor.users.findOne(target)) {
+				throw new Meteor.Error(404, "Target not found.");
+			}
+			if(!Meteor.users.findOne(target).inGame) {
+				throw new Meteor.Error(400, "Target is not in the game.");
+			}
 			Meteor.users.update(assassin, {$set: {"target": target}});
 		}
 	}

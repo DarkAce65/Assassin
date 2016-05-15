@@ -15,6 +15,11 @@ body {
 	min-height: 100%;
 	position: relative;
 	background: url("/background.jpg") no-repeat fixed 50% 50% / cover #2F2F2F;
+
+	::selection {
+		background-color: #333;
+		color: white;
+	}
 }
 
 html, body {
@@ -35,6 +40,18 @@ h1, h2, h3, h4, h5, h6,
 
 	small {
 		font-weight: normal;
+	}
+}
+
+.sweet-alert button.cancel {
+	background-color: #4E4D4B;
+
+	&:hover {
+		background-color: #3E3E3C;
+	}
+
+	&:active, &:focus {
+		background-color: #2E2E2D;
 	}
 }
 

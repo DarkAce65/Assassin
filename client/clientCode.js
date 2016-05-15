@@ -239,11 +239,16 @@ Template.target.events({
 		var assassinName = input.val();
 		input.val("");
 		var assassin = Meteor.users.findOne({"profile.name": assassinName});
-		Meteor.call("killed", assassin._id, function(error) {
-			if(error) {
-				alert(error);
-			}
-		});
+		if(assassin) {
+			Meteor.call("killed", assassin._id, function(error) {
+				if(error) {
+					alert(error);
+				}
+			});
+		}
+		else {
+			alert("Please pick a name from the list.");
+		}
 	},
 	"click #quit": function(e) {
 		Meteor.call("quit", function(error) {

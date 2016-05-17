@@ -58,7 +58,7 @@ Meteor.methods({
 		Actions.insert({
 			"timestamp": Date.now(),
 			"type": "status",
-			"message": "The game has begun."
+			"message": "The game of Assassin has begun. Watch your back."
 		});
 	},
 	"killed": function(assassinId) {

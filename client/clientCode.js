@@ -66,6 +66,9 @@ Template.adminPanel.helpers({
 		if(this.type === "quit") {
 			return "<b>" + a + "</b> quit the game";
 		}
+		if(this.type === "status") {
+			return this.message;
+		}
 		if(!this.confirmed) {
 			c = '<br><span style="color: red;">Waiting for previous target to press "I Was Killed" before updating kill count</span>';
 			var prevTarget = Meteor.users.findOne(assassin.target);
@@ -74,7 +77,7 @@ Template.adminPanel.helpers({
 			}
 		}
 
-		return "<b>" + a + "</b> assassinated <b>" + t + "</b>" + c;
+		return "<i class=\"ascii\">" + this.icon + "</i> <b>" + a + "</b> assassinated <b>" + t + "</b>" + c;
 	},
 	"userList": function() {
 		return Meteor.users.find({}, {sort: {"alive": -1, "profile.name": 1}}).fetch();
@@ -216,6 +219,9 @@ Template.target.helpers({
 		if(this.type === "quit") {
 			return "<b>" + a + "</b> quit the game";
 		}
+		if(this.type === "status") {
+			return this.message;
+		}
 		if(!this.confirmed && this.assassin === Meteor.userId()) {
 			c = '<br><span style="color: red;">Waiting for previous target to press "I Was Killed" before updating kill count</span>';
 			var prevTarget = Meteor.users.findOne(assassin.target);
@@ -224,7 +230,7 @@ Template.target.helpers({
 			}
 		}
 
-		return "<b>" + a + "</b> assassinated <b>" + t + "</b>" + c;
+		return "<i class=\"ascii\">" + this.icon + "</i> <b>" + a + "</b> assassinated <b>" + t + "</b>" + c;
 	},
 	settings: function() {
 		return {

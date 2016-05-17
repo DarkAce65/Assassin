@@ -54,6 +54,7 @@ Meteor.publish("userList", function() {
 Meteor.publish("actions", function() {
 	return Actions.find({
 		$or: [
+			{"type": "status"},
 			{"assassin": this.userId},
 			{"target": this.userId}
 		]

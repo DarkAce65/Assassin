@@ -14,7 +14,6 @@ body {
 	font-family: "Lato";
 	min-height: 100%;
 	position: relative;
-	background: url("/background.jpg") no-repeat fixed 50% 50% / cover #2F2F2F;
 
 	::selection {
 		background-color: #333;
@@ -52,6 +51,24 @@ h1, h2, h3, h4, h5, h6,
 
 	&:active, &:focus {
 		background-color: #2E2E2D;
+	}
+}
+
+.background {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: -1;
+	background-image: url("/battleground.jpg");
+	background-size: cover;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+
+	&.dead {
+		background-image: url("/blood.jpg");
 	}
 }
 

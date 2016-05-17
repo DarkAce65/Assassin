@@ -40,6 +40,15 @@ Template.login.events({
 	}
 });
 
+Template.dashboard.helpers({
+	"background": function() {
+		if(Meteor.user() && Meteor.user().inGame && !Meteor.user().alive) {
+			return {"class": "background dead"};
+		}
+		return {"class": "background"};
+	}
+});
+
 Template.adminPanel.helpers({
 	"actions": function() {
 		return Actions.find({}, {sort: {"timestamp": -1}}).fetch();

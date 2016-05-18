@@ -105,6 +105,7 @@ Meteor.methods({
 		if(user.assassin.valueOf() === assassinId.valueOf()) {
 			var icons = ["︻╦╤──", "︻デ═一", "▬ι═══ﺤ"];
 			Actions.insert({
+				"timestamp": Date.now(),
 				"type": "kill",
 				"icon": icons[Math.floor(Math.random() * icons.length)],
 				"assassin": user.assassin,
@@ -112,7 +113,7 @@ Meteor.methods({
 			});
 			do {
 				Actions.update({"target": user._id}, {
-					$set: {"timestamp": Date.now(), "confirmed": true}
+					$set: {"confirmed": true}
 				});
 				Meteor.users.update(user.assassin, {
 					$set: {"target": user.target},
@@ -180,7 +181,7 @@ Meteor.methods({
 		while(Actions.findOne({"confirmed": false, "target": user.target})) {
 			user = Meteor.users.findOne(user.target);
 			Actions.update({"target": user._id}, {
-				$set: {"timestamp": Date.now(), "confirmed": true}
+				$set: {"confirmed": true}
 			});
 			Meteor.users.update(user.assassin, {
 				$set: {"target": user.target},

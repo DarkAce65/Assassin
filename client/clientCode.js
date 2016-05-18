@@ -221,7 +221,16 @@ Template.target.helpers({
 	"target": function() {
 		return Meteor.users.findOne(Meteor.user().target).profile.name;
 	},
-	"actions": function() {
+	"relevantActions": function() {
+		return Actions.find({
+			$or: [
+				{"type": "status"},
+				{"assassin": Meteor.userId()},
+				{"target": Meteor.userId()}
+			]
+		}, {sort: {"timestamp": -1}}).fetch();
+	},
+	"allActions": function() {
 		return Actions.find({}, {sort: {"timestamp": -1}}).fetch();
 	},
 	"message": function() {

@@ -19,7 +19,7 @@
 			{{/if}}
 		</div>
 	</div>
-	{{#if actions}}
+	{{#if currentUser.inGame}}
 	<div id="actionLog" class="panel panel-danger">
 		<div class="panel-heading">
 			<div class="row">
@@ -28,15 +28,34 @@
 			</div>
 		</div>
 		<div class="panel-body">
-			{{#each actions}}
-			<div class="row">
-				<div class="col-sm-3">{{calendarTime timestamp}}</div>
-				<div class="col-sm-9">
-					<p>{{{message}}}</p>
+			<ul class="nav nav-pills nav-justified" style="margin-bottom: 20px;">
+				<li class="active"><a href="#home" data-toggle="tab">Relevant Actions</a></li>
+				<li><a href="#profile" data-toggle="tab">All Actions</a></li>
+			</ul>
+			<div class="tab-content">
+				<div id="home" class="tab-pane fade in active">
+					{{#each relevantActions}}
+					<div class="row">
+						<div class="col-sm-3">{{calendarTime timestamp}}</div>
+						<div class="col-sm-9">
+							<p>{{{message}}}</p>
+						</div>
+					</div>
+					<div style="height: 10px; border-top: 1px solid gray;"></div>
+					{{/each}}
+				</div>
+				<div id="profile" class="tab-pane fade">
+					{{#each allActions}}
+					<div class="row">
+						<div class="col-sm-3">{{calendarTime timestamp}}</div>
+						<div class="col-sm-9">
+							<p>{{{message}}}</p>
+						</div>
+					</div>
+					<div style="height: 10px; border-top: 1px solid gray;"></div>
+					{{/each}}
 				</div>
 			</div>
-			<div style="height: 10px; border-top: 1px solid gray;"></div>
-			{{/each}}
 		</div>
 	</div>
 	{{/if}}

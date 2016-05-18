@@ -131,22 +131,6 @@ Template.adminPanel.events({
 			}
 		});
 	},
-	"click .ruleAssassin": function(e) {
-		e.preventDefault();
-		Meteor.call("confirmKill", this._id, function(error) {
-			if(error) {
-				alert(error);
-			}
-		});
-	},
-	"click .ruleTarget": function(e) {
-		e.preventDefault();
-		Meteor.call("ruleTarget", this._id, function(error) {
-			if(error) {
-				alert(error);
-			}
-		});
-	},
 	"show.bs.modal #controlPanel": function(e) {
 		var a = $(e.relatedTarget).data("assassin");
 		Session.set("configureAssassin", a);

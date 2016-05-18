@@ -298,6 +298,9 @@ Template.target.events({
 });
 
 Template.leaderboard.helpers({
+	"playerCount": function() {
+		return Meteor.users.find({"inGame": true, "alive": true}).count();
+	},
 	"userList": function() {
 		return Meteor.users.find({"inGame": true}, {sort: {"kills": -1, "alive": -1, "profile.name": 1}}).fetch();
 	}

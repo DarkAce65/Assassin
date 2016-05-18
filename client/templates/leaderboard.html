@@ -2,12 +2,13 @@
 	<div id="leaderboard" class="panel panel-danger">
 		<div class="panel-heading">Leaderboard</div>
 		<div class="panel-body">
-			<div style="text-align: center;">
+			<div class="text-center">
 				<img src="/banner.jpg" style="width: 70%; max-width: 350px;">
 				<br>
 				<small>Image courtesy of Adam Weinreb</small>
 			</div>
 			{{#if userList}}
+			<h3 class="text-center">There are {{playerCount}} players left</h3>
 			<hr>
 			<div class="table-responsive">
 				<table id="leaderboardTable" class="table table-striped table-hover">

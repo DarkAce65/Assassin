@@ -131,6 +131,9 @@ Template.adminPanel.events({
 			}
 		});
 	},
+	"shown.bs.modal #broadcastModal": function(e) {
+		$(e.target).find("#message").focus();
+	},
 	"click #broadcast": function(e) {
 		var input = $(e.target).closest(".modal").find("#message");
 		var message = input.val();
@@ -266,6 +269,9 @@ Template.target.helpers({
 });
 
 Template.target.events({
+	"shown.bs.modal #killModal": function(e) {
+		$(e.target).find("#assassin").focus();
+	},
 	"click #killed": function(e) {
 		var input = $(e.target).closest(".modal").find("#assassin");
 		var assassinName = input.val();

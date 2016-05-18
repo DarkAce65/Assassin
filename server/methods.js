@@ -62,6 +62,9 @@ Meteor.methods({
 		});
 	},
 	"killed": function(assassinId) {
+		if(!this.userId) {
+			throw new Meteor.Error(401, "You are not logged in.");
+		}
 		var user = Meteor.users.findOne(this.userId);
 		if(!user.inGame) {
 			throw new Meteor.Error(401, "You are not in the game.");
@@ -76,78 +79,19 @@ Meteor.methods({
 		if(!assassin.inGame) {
 			throw new Meteor.Error(400, "Assassin is not in the game.");
 		}
-		if(!assassin.alive) {
-			throw new Meteor.Error(400, "Assassin is not alive.");
+		if(Actions.findOne({"target": this.userId})) {
+			throw new Meteor.Error(400, "An action item targeting you already exists.");
 		}
 
-		if(!Actions.findOne({"target": this.userId})) {
-			if(user.assassin.valueOf() === assassinId.valueOf()) {
-				var icons = ["︻╦╤──", "︻デ═一", "▬ι═══ﺤ"];
-				Actions.insert({
-					"type": "kill",
-					"icon": icons[Math.floor(Math.random() * icons.length)],
-					"assassin": user.assassin,
-					"target": user._id
-				});
-				do {
-					Actions.update({"target": user._id}, {
-						$set: {"timestamp": Date.now(), "confirmed": true}
-					});
-					Meteor.users.update(user.assassin, {
-						$set: {"target": user.target},
-						$inc: {"kills": 1}
-					});
-					Meteor.users.update(user._id, {
-						$set: {"alive": false}
-					});
-					Meteor.users.update(user.target, {
-						$set: {"assassin": user.assassin}
-					});
-					user = Meteor.users.findOne(user.target);
-				} while(Actions.findOne({"confirmed": false, "target": user._id}));
-			}
-			else {
-				var icons = ["︻╦╤──", "︻デ═一", "▬ι═══ﺤ"];
-				Actions.insert({
-					"timestamp": Date.now(),
-					"type": "kill",
-					"confirmed": false,
-					"icon": icons[Math.floor(Math.random() * icons.length)],
-					"assassin": assassinId,
-					"target": this.userId
-				});
-				Meteor.users.update(this.userId, {
-					$set: {"alive": false}
-				});
-			}
-		}
-	},
-	"quit": function() {
-		var user = Meteor.users.findOne(this.userId);
-		if(!user.inGame) {
-			throw new Meteor.Error(401, "You are not in the game.");
-		}
-		if(!user.alive) {
-			throw new Meteor.Error(401, "You are not alive.");
-		}
-
-		if(!Actions.findOne({"target": this.userId})) {
+		if(user.assassin.valueOf() === assassinId.valueOf()) {
+			var icons = ["︻╦╤──", "︻デ═一", "▬ι═══ﺤ"];
 			Actions.insert({
-				"timestamp": Date.now(),
-				"type": "quit",
-				"assassin": this.userId
+				"type": "kill",
+				"icon": icons[Math.floor(Math.random() * icons.length)],
+				"assassin": user.assassin,
+				"target": user._id
 			});
-			Meteor.users.update(user.assassin, {
-				$set: {"target": user.target}
-			});
-			Meteor.users.update(this.userId, {
-				$set: {"alive": false}
-			});
-			Meteor.users.update(user.target, {
-				$set: {"assassin": user.assassin}
-			});
-			while(Actions.findOne({"confirmed": false, "target": user.target})) {
-				user = Meteor.users.findOne(user.target);
+			do {
 				Actions.update({"target": user._id}, {
 					$set: {"timestamp": Date.now(), "confirmed": true}
 				});
@@ -161,7 +105,68 @@ Meteor.methods({
 				Meteor.users.update(user.target, {
 					$set: {"assassin": user.assassin}
 				});
-			}
+				user = Meteor.users.findOne(user.target);
+			} while(Actions.findOne({"confirmed": false, "target": user._id}));
+		}
+		else {
+			var icons = ["︻╦╤──", "︻デ═一", "▬ι═══ﺤ"];
+			Actions.insert({
+				"timestamp": Date.now(),
+				"type": "kill",
+				"confirmed": false,
+				"icon": icons[Math.floor(Math.random() * icons.length)],
+				"assassin": assassinId,
+				"target": this.userId
+			});
+			Meteor.users.update(this.userId, {
+				$set: {"alive": false}
+			});
+		}
+	},
+	"quit": function() {
+		if(!this.userId) {
+			throw new Meteor.Error(401, "You are not logged in.");
+		}
+		var user = Meteor.users.findOne(this.userId);
+		if(!user.inGame) {
+			throw new Meteor.Error(401, "You are not in the game.");
+		}
+		if(!user.alive) {
+			throw new Meteor.Error(401, "You are not alive.");
+		}
+		if(Actions.findOne({"target": this.userId})) {
+			throw new Meteor.Error(400, "An action item targeting you already exists.");
+		}
+
+		Actions.insert({
+			"timestamp": Date.now(),
+			"type": "quit",
+			"assassin": this.userId
+		});
+		Meteor.users.update(user.assassin, {
+			$set: {"target": user.target}
+		});
+		Meteor.users.update(this.userId, {
+			$set: {"alive": false}
+		});
+		Meteor.users.update(user.target, {
+			$set: {"assassin": user.assassin}
+		});
+		while(Actions.findOne({"confirmed": false, "target": user.target})) {
+			user = Meteor.users.findOne(user.target);
+			Actions.update({"target": user._id}, {
+				$set: {"timestamp": Date.now(), "confirmed": true}
+			});
+			Meteor.users.update(user.assassin, {
+				$set: {"target": user.target},
+				$inc: {"kills": 1}
+			});
+			Meteor.users.update(user._id, {
+				$set: {"alive": false}
+			});
+			Meteor.users.update(user.target, {
+				$set: {"assassin": user.assassin}
+			});
 		}
 	},
 	"changeDisplayName": function(userId, name) {

@@ -131,6 +131,16 @@ Template.adminPanel.events({
 			}
 		});
 	},
+	"click #broadcast": function(e) {
+		var input = $(e.target).closest(".modal").find("#message");
+		var message = input.val();
+		input.val("");
+		Meteor.call("broadcast", message, function(error) {
+			if(error) {
+				alert(error);
+			}
+		});
+	},
 	"show.bs.modal #controlPanel": function(e) {
 		var a = $(e.relatedTarget).data("assassin");
 		Session.set("configureAssassin", a);

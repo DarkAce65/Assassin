@@ -2,7 +2,8 @@
 	<div id="adminPanel" class="panel panel-primary">
 		<div class="panel-heading">Admin Panel</div>
 		<div class="panel-body">
-			<button id="startGame" class="btn btn-primary"><i class="fa fa-gamepad"></i> Start Game</button>
+			<button id="startGame" class="btn btn-primary"><i class="fa fa-fw fa-gamepad"></i> Start Game</button>
+			<button data-toggle="modal" data-target="#broadcastModal" class="btn btn-primary"><i class="fa fa-fw fa-bullhorn"></i> Broadcast Message</button>
 		</div>
 	</div>
 	<div id="actionLog" class="panel panel-danger">
@@ -52,6 +53,23 @@
 						{{/each}}
 					</tbody>
 				</table>
+			</div>
+		</div>
+	</div>
+	<div id="broadcastModal" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Broadcast Message</h4>
+				</div>
+				<div class="modal-body">
+					<p>Enter a message to broadcast to all players.</p>
+					<input id="message" class="form-control" placeholder="Message">
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<button id="broadcast" class="btn btn-primary" data-dismiss="modal">Broadcast</button>
+				</div>
 			</div>
 		</div>
 	</div>

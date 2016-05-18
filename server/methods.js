@@ -61,6 +61,19 @@ Meteor.methods({
 			"message": "The game of Assassin has begun. Watch your back."
 		});
 	},
+	"broadcast": function(message) {
+		if(!this.userId) {
+			throw new Meteor.Error(401, "You are not logged in.");
+		}
+		if(!Roles.userIsInRole(this.userId, "admin")) {
+			throw new Meteor.Error(401, "You are not authorized to broadcast messages.");
+		}
+		Actions.insert({
+			"timestamp": Date.now(),
+			"type": "status",
+			"message": message
+		});
+	},
 	"killed": function(userId, assassinId) {
 		if(!this.userId) {
 			throw new Meteor.Error(401, "You are not logged in.");

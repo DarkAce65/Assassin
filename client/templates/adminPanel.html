@@ -55,7 +55,7 @@
 			</div>
 		</div>
 	</div>
-	<div id="controlPanel" class="modal fade" tabindex="-1" data-backdrop="static">
+	<div id="controlPanel" class="modal fade" tabindex="-1">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -63,20 +63,35 @@
 				</div>
 				<div class="modal-body">
 					<p>Change <span class="assassinName" style="font-weight: bold;">Unknown</span>'s display name to...</p>
-					<div class="input-group">
-						<input id="name" class="form-control" placeholder="Display Name">
-						<span class="input-group-btn">
-							<button id="changeDisplayName" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-fw fa-angle-double-right"></i></button>
-						</span>
-					</div>
+					<p>
+						<div class="input-group">
+							<input id="name" class="form-control" placeholder="Display Name">
+							<span class="input-group-btn">
+								<button id="changeDisplayName" class="btn btn-primary"><i class="fa fa-fw fa-angle-double-right"></i></button>
+							</span>
+						</div>
+					</p>
 					<hr>
-					<p>Reassign <span class="assassinName" style="font-weight: bold;">Unknown</span>'s target to...</p>
-					<div class="input-group">
-						{{>inputAutocomplete settings=settings id="target" class="form-control" placeholder="Target"}}
-						<span class="input-group-btn">
-							<button id="reassignTarget" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-fw fa-crosshairs"></i></button>
-						</span>
-					</div>
+					<h4 class="text-danger">Danger Zone</h4>
+					<p>Reassign <span class="assassinName" style="font-weight: bold;">Unknown</span>'s target to...<br><small class="text-warning">Note that this could create a situation where a user is their own target.</small></p>
+					<p>
+						<div class="input-group">
+							{{>inputAutocomplete settings=settings id="target" class="form-control" placeholder="Target"}}
+							<span class="input-group-btn">
+								<button id="reassignTarget" class="btn btn-primary"><i class="fa fa-fw fa-crosshairs"></i></button>
+							</span>
+						</div>
+					</p>
+					<p>Forcibly kill <span class="assassinName" style="font-weight: bold;">Unknown</span> and give credit to...</p>
+					<p>
+						<div class="input-group">
+							{{>inputAutocomplete settings=settings id="assassin" class="form-control" placeholder="Assassin"}}
+							<span class="input-group-btn">
+								<button id="forceKill" class="btn btn-danger"><i class="fa fa-fw fa-gavel"></i></button>
+							</span>
+						</div>
+					</p>
+					<button id="forceQuit" class="btn btn-danger"><i class="fa fa-fw fa-ban"></i> Force <span class="assassinName">Unknown</span> to Quit</button>
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-default" data-dismiss="modal">Cancel</button>

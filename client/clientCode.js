@@ -163,6 +163,29 @@ Template.adminPanel.events({
 		else {
 			alert("Please pick a name from the list.");
 		}
+	},
+	"click #forceKill": function(e) {
+		var input = $(e.target).closest(".modal").find("#assassin");
+		var name = input.val();
+		input.val("");
+		var assassin = Meteor.users.findOne({"profile.name": name});
+		if(assassin) {
+			Meteor.call("killed", Session.get("configureAssassin"), assassin._id, function(error) {
+				if(error) {
+					alert(error);
+				}
+			});
+		}
+		else {
+			alert("Please pick a name from the list.");
+		}
+	},
+	"click #forceQuit": function(e) {
+		Meteor.call("quit", Session.get("configureAssassin"), function(error) {
+			if(error) {
+				alert(error);
+			}
+		});
 	}
 });
 
@@ -239,7 +262,7 @@ Template.target.events({
 		input.val("");
 		var assassin = Meteor.users.findOne({"profile.name": assassinName});
 		if(assassin) {
-			Meteor.call("killed", assassin._id, function(error) {
+			Meteor.call("killed", Meteor.userId(), assassin._id, function(error) {
 				if(error) {
 					alert(error);
 				}
@@ -250,7 +273,7 @@ Template.target.events({
 		}
 	},
 	"click #quit": function(e) {
-		Meteor.call("quit", function(error) {
+		Meteor.call("quit", Meteor.userId(), function(error) {
 			if(error) {
 				alert(error);
 			}

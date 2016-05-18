@@ -61,16 +61,22 @@ Meteor.methods({
 			"message": "The game of Assassin has begun. Watch your back."
 		});
 	},
-	"killed": function(assassinId) {
+	"killed": function(userId, assassinId) {
 		if(!this.userId) {
 			throw new Meteor.Error(401, "You are not logged in.");
 		}
-		var user = Meteor.users.findOne(this.userId);
+		if(this.userId !== userId && !Roles.userIsInRole(this.userId, "admin")) {
+			throw new Meteor.Error(401, "You are not authorized to kill others.");
+		}
+		var user = Meteor.users.findOne(userId);
+		if(!user) {
+			throw new Meteor.Error(404, "User not found.");
+		}
 		if(!user.inGame) {
-			throw new Meteor.Error(401, "You are not in the game.");
+			throw new Meteor.Error(401, "User is not in the game.");
 		}
 		if(!user.alive) {
-			throw new Meteor.Error(401, "You are not alive.");
+			throw new Meteor.Error(401, "User is not alive.");
 		}
 		var assassin = Meteor.users.findOne(assassinId);
 		if(!assassin) {
@@ -79,8 +85,8 @@ Meteor.methods({
 		if(!assassin.inGame) {
 			throw new Meteor.Error(400, "Assassin is not in the game.");
 		}
-		if(Actions.findOne({"target": this.userId})) {
-			throw new Meteor.Error(400, "An action item targeting you already exists.");
+		if(Actions.findOne({"target": userId})) {
+			throw new Meteor.Error(400, "An action item targeting this user already exists.");
 		}
 
 		if(user.assassin.valueOf() === assassinId.valueOf()) {
@@ -116,37 +122,43 @@ Meteor.methods({
 				"confirmed": false,
 				"icon": icons[Math.floor(Math.random() * icons.length)],
 				"assassin": assassinId,
-				"target": this.userId
+				"target": userId
 			});
-			Meteor.users.update(this.userId, {
+			Meteor.users.update(userId, {
 				$set: {"alive": false}
 			});
 		}
 	},
-	"quit": function() {
+	"quit": function(userId) {
 		if(!this.userId) {
 			throw new Meteor.Error(401, "You are not logged in.");
 		}
-		var user = Meteor.users.findOne(this.userId);
+		if(this.userId !== userId && !Roles.userIsInRole(this.userId, "admin")) {
+			throw new Meteor.Error(401, "You are not authorized to force-quit others.");
+		}
+		var user = Meteor.users.findOne(userId);
+		if(!user) {
+			throw new Meteor.Error(404, "User not found.");
+		}
 		if(!user.inGame) {
-			throw new Meteor.Error(401, "You are not in the game.");
+			throw new Meteor.Error(401, "User is not in the game.");
 		}
 		if(!user.alive) {
-			throw new Meteor.Error(401, "You are not alive.");
+			throw new Meteor.Error(401, "User is not alive.");
 		}
-		if(Actions.findOne({"target": this.userId})) {
-			throw new Meteor.Error(400, "An action item targeting you already exists.");
+		if(Actions.findOne({"target": userId})) {
+			throw new Meteor.Error(400, "An action item targeting this user already exists.");
 		}
 
 		Actions.insert({
 			"timestamp": Date.now(),
 			"type": "quit",
-			"assassin": this.userId
+			"assassin": userId
 		});
 		Meteor.users.update(user.assassin, {
 			$set: {"target": user.target}
 		});
-		Meteor.users.update(this.userId, {
+		Meteor.users.update(userId, {
 			$set: {"alive": false}
 		});
 		Meteor.users.update(user.target, {

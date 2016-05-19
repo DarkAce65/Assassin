@@ -93,7 +93,7 @@ Template.adminPanel.helpers({
 		return Actions.find({"timestamp": {$gt: past24}, "type": "kill", "confirmed": true}).count();
 	},
 	"playerCount": function() {
-		return Meteor.users.find().count();
+		return Meteor.users.find({"inGame": true}).count();
 	},
 	"statusStyle": function() {
 		if(this.alive) {

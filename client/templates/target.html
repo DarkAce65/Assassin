@@ -29,31 +29,30 @@
 		</div>
 		<div class="panel-body">
 			<ul class="nav nav-pills nav-justified" style="margin-bottom: 20px;">
-				<li class="active"><a href="#home" data-toggle="tab">Relevant Actions</a></li>
-				<li><a href="#profile" data-toggle="tab">All Actions</a></li>
+				<li class="active"><a href="#relevant" data-toggle="tab">Relevant Actions</a></li>
+				<li><a href="#all" data-toggle="tab">All Actions</a></li>
 			</ul>
-			<hr>
 			<div class="tab-content">
-				<div id="home" class="tab-pane fade in active">
+				<div id="relevant" class="tab-pane fade in active">
 					{{#each relevantActions}}
+					<div style="margin: 10px 0; border-top: 1px solid gray;"></div>
 					<div class="row">
 						<div class="col-sm-3">{{calendarTime timestamp}}</div>
 						<div class="col-sm-9">
 							<p>{{{message}}}</p>
 						</div>
 					</div>
-					<div style="margin: 10px 0; border-top: 1px solid gray;"></div>
 					{{/each}}
 				</div>
-				<div id="profile" class="tab-pane fade">
+				<div id="all" class="tab-pane fade">
 					{{#each allActions}}
+					<div style="height: 10px; border-top: 1px solid gray;"></div>
 					<div class="row">
 						<div class="col-sm-3">{{calendarTime timestamp}}</div>
 						<div class="col-sm-9">
 							<p>{{{message}}}</p>
 						</div>
 					</div>
-					<div style="height: 10px; border-top: 1px solid gray;"></div>
 					{{/each}}
 				</div>
 			</div>

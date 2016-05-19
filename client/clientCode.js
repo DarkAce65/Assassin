@@ -82,6 +82,16 @@ Template.adminPanel.helpers({
 	"userList": function() {
 		return Meteor.users.find({}, {sort: {"alive": -1, "profile.name": 1}}).fetch();
 	},
+	"aliveCount": function() {
+		return Meteor.users.find({"inGame": true, "alive": true}).count();
+	},
+	"killCount": function() {
+		return Actions.find({"type": "kill", "confirmed": true}).count();
+	},
+	"kill24Count": function() {
+		var past24 = Date.now() - 24 * 60 * 60 * 1000;
+		return Actions.find({"timestamp": {$gt: past24}, "type": "kill", "confirmed": true}).count();
+	},
 	"playerCount": function() {
 		return Meteor.users.find().count();
 	},

@@ -230,7 +230,6 @@ Meteor.methods({
 				throw new Meteor.Error(400, "Target is not in the game.");
 			}
 			Meteor.users.update(assassin, {$set: {"target": target}});
-			Meteor.users.update(target, {$set: {"assassin": assassin}});
 		}
 	}
 });

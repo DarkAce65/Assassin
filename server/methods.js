@@ -102,7 +102,7 @@ Meteor.methods({
 			throw new Meteor.Error(400, "An action item targeting this user already exists.");
 		}
 
-		if(assassin.target === this.userId) {
+		if(assassin.target === userId) {
 			var icons = ["︻╦╤──", "︻デ═一", "▬ι═══ﺤ"];
 			Actions.insert({
 				"timestamp": Date.now(),

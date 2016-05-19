@@ -28,14 +28,10 @@ Meteor.methods({
 		shuffle(userIdList);
 
 		for(var i = 0; i < userIdList.length; i++) {
-			var assassinId = userIdList[i];
-			var userId = userIdList[(i + 1) % userIdList.length];
-			var targetId = userIdList[(i + 2) % userIdList.length];
+			var userId = userIdList[i];
+			var targetId = userIdList[(i + 1) % userIdList.length];
 			Meteor.users.update(userId, {
-				$set: {
-					"assassin": assassinId,
-					"target": targetId
-				}
+				$set: {"target": targetId}
 			});
 		}
 	},
@@ -107,23 +103,27 @@ Meteor.methods({
 			Actions.insert({
 				"timestamp": Date.now(),
 				"type": "kill",
+				"confirmed": true,
 				"icon": icons[Math.floor(Math.random() * icons.length)],
-				"assassin": user.assassin,
-				"target": user._id
+				"assassin": assassinId,
+				"target": userId
 			});
 			do {
 				Actions.update({"target": user._id}, {
 					$set: {"confirmed": true}
 				});
-				Meteor.users.update(user.assassin, {
+				assassin = Meteor.users.findOne(Actions.findOne({"target": user._id}).assassin);
+				Meteor.users.update(assassin._id, {
 					$set: {"target": user.target},
 					$inc: {"kills": 1}
 				});
+				if(!assassin.alive) {
+					Meteor.users.update({"alive": true, "target": user._id}, {
+						$set: {"target": user.target}
+					});
+				}
 				Meteor.users.update(user._id, {
 					$set: {"alive": false}
-				});
-				Meteor.users.update(user.target, {
-					$set: {"assassin": user.assassin}
 				});
 				user = Meteor.users.findOne(user.target);
 			} while(Actions.findOne({"confirmed": false, "target": user._id}));
@@ -160,6 +160,13 @@ Meteor.methods({
 		if(!user.alive) {
 			throw new Meteor.Error(401, "User is not alive.");
 		}
+		var assassin = Meteor.users.findOne({"alive": true, "target": userId});
+		if(!assassin) {
+			throw new Meteor.Error(404, "Assassin not found.");
+		}
+		if(!assassin.inGame) {
+			throw new Meteor.Error(400, "Assassin is not in the game.");
+		}
 		if(Actions.findOne({"target": userId})) {
 			throw new Meteor.Error(400, "An action item targeting this user already exists.");
 		}
@@ -167,32 +174,34 @@ Meteor.methods({
 		Actions.insert({
 			"timestamp": Date.now(),
 			"type": "quit",
-			"assassin": userId
+			"assassin": userId,
+			"target": userId
 		});
-		Meteor.users.update(user.assassin, {
+		Meteor.users.update(assassin._id, {
 			$set: {"target": user.target}
 		});
-		Meteor.users.update(userId, {
+		Meteor.users.update(user._id, {
 			$set: {"alive": false}
 		});
-		Meteor.users.update(user.target, {
-			$set: {"assassin": user.assassin}
-		});
-		while(Actions.findOne({"confirmed": false, "target": user.target})) {
-			user = Meteor.users.findOne(user.target);
+		user = Meteor.users.findOne(user.target);
+		while(Actions.findOne({"confirmed": false, "target": user._id})) {
 			Actions.update({"target": user._id}, {
 				$set: {"confirmed": true}
 			});
-			Meteor.users.update(user.assassin, {
+			assassin = Meteor.users.findOne(Actions.findOne({"target": user._id}).assassin);
+			Meteor.users.update(assassin._id, {
 				$set: {"target": user.target},
 				$inc: {"kills": 1}
 			});
+			if(!assassin.alive) {
+				Meteor.users.update({"alive": true, "target": user._id}, {
+					$set: {"target": user.target}
+				});
+			}
 			Meteor.users.update(user._id, {
 				$set: {"alive": false}
 			});
-			Meteor.users.update(user.target, {
-				$set: {"assassin": user.assassin}
-			});
+			user = Meteor.users.findOne(user.target);
 		}
 	},
 	"changeDisplayName": function(userId, name) {
